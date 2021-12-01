@@ -1,0 +1,24 @@
+.bi {
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
+.text-small {
+  font-size: 85%;
+}
+
+.btn_bar1 {
+  width: 6rem;
+  border-radius: 15px;
+}
+
+.btn_bar2 {
+  color: #2d2e2c;
+}
+.active_li {
+  background-color: #2d2e2c;
+}
+
+.active_a {
+  color: #ffdf00;
+}

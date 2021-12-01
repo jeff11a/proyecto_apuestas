@@ -1,0 +1,88 @@
+/*Text color*/
+.text_gold {
+  color: #ffdf00;
+}
+.text_bluePrussian {
+  color: #003b4d;
+}
+.text_darkHeavyMetal {
+  color: #2d2e2c;
+}
+.text_greenPistachio {
+  color: #8ac500;
+}
+
+/*Font size*/
+.fs_2-5rem {
+  font-size: 2.5rem;
+}
+.fs_3rem {
+  font-size: 3rem;
+}
+.fs_3-5rem {
+  font-size: 3.5rem;
+}
+
+/*Background*/
+.bg_gold {
+  background-color: #ffdf00;
+}
+.bg_greenPistachio {
+  background-color: #8ac500;
+}
+.bg_bluePrussian {
+  background-color: #003b4d;
+}
+.bg_white2 {
+  background-color: #fefefe;
+}
+.bg_grayAlto {
+  background-color: #e0e0e0;
+}
+.bg_darkHeavyMetal {
+  background-color: #2d2e2c;
+}
+
+/*Boxes*/
+.shadow {
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black;
+}
+.rounded_15 {
+  border-radius: 15px;
+}
+.border_bottom_gold {
+  border-bottom: 1px solid #ffdf00;
+}
+.rounded_50 {
+  border-radius: 50;
+}
+
+/* width and height */
+.h_100vh {
+  height: 100vh !;
+}
+
+.width_5rem {
+  width: 5rem;
+}
+.width_10rem {
+  width: 10rem;
+}
+
+.width_11rem {
+  width: 11rem;
+}
+
+.height_5rem {
+  height: 5rem;
+}
+
+/*Componentes*/
+.btn1 {
+  width: 8rem;
+  border: 1px solid #2d2e2c;
+  border-radius: 15px;
+  color: #2d2e2c;
+}

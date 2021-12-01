@@ -1,0 +1,58 @@
+{
+  "usuarios": [
+    {
+      "id": 0,
+      "nombre": "admin",
+      "saldo": 950000,
+      "victorias": 0,
+      "banco": 1990000,
+      "tipo_usuario": "a"
+    },
+    {
+      "id": 1,
+      "nombre": "carlos",
+      "saldo": 40000,
+      "victorias": 0,
+      "banco": 1980000,
+      "tipo_usuario": "c"
+    }
+  ],
+  "competidores": [
+    "Magnus Carlsen",
+    "Alexander Alekhine",
+    "José Raúl Capablanca",
+    "Paul Morphy",
+    "Levon Aronian",
+    "Hikaru Nakamura"
+  ],
+  "eventos": [
+    {
+      "id": 0,
+      "evento": "Magnus Carlsen vs Alexander Alekhine",
+      "participantes": [
+        "Magnus Carlsen",
+        "Alexander Alekhine"
+      ],
+      "activo": true,
+      "apuestas": []
+    },
+    {
+      "id": 1,
+      "evento": "José Raúl Capablanca vs Paul Morphy",
+      "participantes": [
+        "José Raúl Capablanca",
+        "Paul Morphy"
+      ],
+      "activo": true
+    },
+    {
+      "id": 2,
+      "evento": "Levon Aronian vs Hikaru Nakamura",
+      "participantes": [
+        "Levon Aronian",
+        "Hikaru Nakamura"
+      ],
+      "activo": true
+    }
+  ]
+}
