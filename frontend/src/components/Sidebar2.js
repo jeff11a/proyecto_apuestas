@@ -1,15 +1,13 @@
 import React, { Component } from "react";
-
-import "../assets/css/Sidebar2.css";
 import { Link } from "react-router-dom";
 
 import {
-  faHome,
-  faTachometerAlt,
-  faUsers,
-  faTrophy,
-  faDownload,
-} from "@fortawesome/free-solid-svg-icons";
+    faHome,
+    faTachometerAlt,
+    faUsers,
+    faTrophy,
+    faDownload 
+  } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default class Sidebar2 extends Component {
@@ -41,7 +39,7 @@ export default class Sidebar2 extends Component {
         <hr className="sidebar-divider" />
 
         <li className="nav-item active">
-          <Link className="nav-link" to="/dashboard">
+          <Link className="nav-link" to="/dashboard/users">
             <FontAwesomeIcon icon={faUsers} />
             <span className="mx-3">Usuarios</span>
           </Link>
@@ -50,7 +48,7 @@ export default class Sidebar2 extends Component {
         <hr className="sidebar-divider" />
 
         <li className="nav-item active">
-          <Link className="nav-link" to="/dashboard">
+          <Link className="nav-link" to="/dashboard/bets">
             <FontAwesomeIcon icon={faTrophy} />
             <span className="mx-3">Eventos de Apuesta</span>
           </Link>
@@ -59,7 +57,7 @@ export default class Sidebar2 extends Component {
         <hr className="sidebar-divider" />
 
         <li className="nav-item active">
-          <Link className="nav-link" to="/dashboard">
+          <Link className="nav-link" to="/dashboard/reports">
             <FontAwesomeIcon icon={faDownload} />
             <span className="mx-3">Reportes</span>
           </Link>

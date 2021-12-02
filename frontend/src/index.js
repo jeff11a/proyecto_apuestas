@@ -10,6 +10,9 @@ import Registro from "./routes/Registro";
 import Saldo from "./routes/Saldo";
 import Finalizados from "./routes/Finalizados";
 import Dashboard from "./routes/Dashboard";
+import Dashboard_User from "./routes/Dashboard_User";
+import Dashboard_Bets from "./routes/Dashboard_Bets";
+import Dashboard_Reports from "./routes/Dashboard_Reports";
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
@@ -31,6 +34,9 @@ render(
       <Route path="saldo" element={<Saldo />} />
       <Route path="finalizados" element={<Finalizados />} />
       <Route path="dashboard" element={<Dashboard />} />
+      <Route path="dashboard/users" element={<Dashboard_User />} />
+      <Route path="dashboard/bets" element={<Dashboard_Bets />} />
+      <Route path="dashboard/reports" element={<Dashboard_Reports />} />
     </Routes>
   </BrowserRouter>,
   rootElement
