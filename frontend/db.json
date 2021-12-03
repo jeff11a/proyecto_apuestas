@@ -11,9 +11,9 @@
     {
       "id": 1,
       "nombre": "carlos",
-      "saldo": 40000,
+      "saldo": 800000,
       "victorias": 0,
-      "banco": 1980000,
+      "banco": 980000,
       "tipo_usuario": "c"
     }
   ],

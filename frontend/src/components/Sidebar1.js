@@ -9,7 +9,7 @@ const Sidebar = (props) => {
   };
 
   return (
-    <div className="rounded_15 sidebar col-md-2 d-flex flex-column p-3 text-white bg_darkHeavyMetal radius_20">
+    <div className="rounded_15 col-md-2 d-flex flex-column p-3 text-white bg_darkHeavyMetal radius_20 h_80vh">
       <a
         href="/#"
         className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"

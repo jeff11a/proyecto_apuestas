@@ -6,7 +6,7 @@ import GestionUsuarios from "../components/GestionUsuarios";
 
 export default class Dashboard extends Component {
   render() {
-    require("../assets/css/sb-admin-2.min.css");
+    //require("../assets/css/sb-admin-2.min.css");
 
     return (
       <React.Fragment>

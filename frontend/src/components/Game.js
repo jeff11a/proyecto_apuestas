@@ -7,6 +7,26 @@ import dataHandler from "../services/dataHandler";
 import utils from "../utils/utils.js";
 import { btnMoney } from "../utils/utilsCss.js";
 
+const Participantes = (props) => {
+  const { evento, setSeleccionEvento } = props;
+
+  const participante1 = evento.participantes[0];
+  const participante2 = evento.participantes[1];
+
+  return (
+    <select
+      onChange={(event) => {
+        setSeleccionEvento(event.target.value);
+      }}
+    >
+      <option value="0" defaultValue>
+        {participante1}
+      </option>
+      <option value="1">{participante2}</option>
+    </select>
+  );
+};
+
 const Game = (props) => {
   const id = process.env.REACT_APP_CLIENTE;
   const urlUsuarios = "http://localhost:3001/usuarios";
@@ -15,6 +35,11 @@ const Game = (props) => {
   const [condicionalGanador, setCondicionalGanador] = useState();
   const [inputValue, setInputValue] = useState("");
   const [updateUsuarios, setUpdateUsuarios] = useState(false);
+  const [seleccionEvento, setSeleccionEvento] = useState("0");
+
+  useEffect(() => {
+    console.log(seleccionEvento);
+  }, [seleccionEvento]);
 
   useEffect(() => {
     dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
@@ -54,29 +79,43 @@ const Game = (props) => {
     event.preventDefault();
     setEventoGanador("");
     if (usuarios.length > 0 && utils.isNumeric(inputValue)) {
-      const usuarioApuesta = Math.floor(Math.random() * 2);
+      const usuarioApuesta = seleccionEvento;
+      const saldoActual = usuarios[id].saldo;
+      const dineroApostado = Number(inputValue);
 
-      //Cuando se da click en apostar se resta del saldo el dinero a espera si gano
-      dataHandler.update();
-      switch (usuarioApuesta) {
-        case 0:
-          console.log("perdio");
+      if (window.confirm(`Esta seguro de apostar $${inputValue}?`)) {
+        const newSaldo = saldoActual - dineroApostado;
 
-          setEventoGanador("Perdio");
-          setCondicionalGanador(false);
-          break;
-        case 1:
-          console.log("gano");
-          setEventoGanador("Gano");
-          setCondicionalGanador(true);
-          ganancia();
-          break;
+        const newUser = {
+          ...usuarios[id],
+          saldo: newSaldo,
+        };
 
-        default:
-          break;
+        dataHandler.update(urlUsuarios, id, newUser).then(() => {
+          console.log("antes update");
+          setUpdateUsuarios(!updateUsuarios);
+          console.log("antes switch");
+          console.log(usuarioApuesta);
+
+          switch (usuarioApuesta) {
+            case "0":
+              console.log("perdio");
+              setEventoGanador("Perdio");
+              setCondicionalGanador(false);
+              break;
+            case "1":
+              console.log("gano");
+              setEventoGanador("Gano");
+              setCondicionalGanador(true);
+              ganancia();
+              break;
+
+            default:
+              break;
+          }
+        });
       }
-
-      console.log(usuarioApuesta);
+      //Cuando se da click en apostar se resta del saldo el dinero a espera si gano
     } else {
       console.log("No es un numero");
     }
@@ -88,7 +127,7 @@ const Game = (props) => {
     const apostado = Number(inputValue);
 
     if (apostado) {
-      const newSaldo = saldoActual + Number(apostado);
+      const newSaldo = saldoActual + Number(apostado) * 2;
 
       const newUser = {
         ...usuarios[id],
@@ -198,6 +237,14 @@ const Game = (props) => {
                       onChange={onClick}
                     />
                   </div>
+
+                  {eventos[eventoActual] ? (
+                    <Participantes
+                      evento={eventos[eventoActual]}
+                      setSeleccionEvento={setSeleccionEvento}
+                    />
+                  ) : null}
+
                   <button
                     className="btn bg_gold btn1 shadow me-2"
                     onClick={apostar}
