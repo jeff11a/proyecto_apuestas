@@ -97,14 +97,16 @@ const Apostar = () => {
           </span>
 
           <span className="text-end fs-4">
-            ${usuarios.length > 0 ? usuarios[id].saldo : "0.00"} <br />
+            ${usuarios.length > 0 ? usuarios[id].saldo.toFixed(2) : "0.00"}{" "}
+            <br />
             Saldo actual
           </span>
         </div>
         <div className="bg_darkHeavyMetal d text_gold d-flex flex-row mb-2 p-1 rounded_15 shadow">
           <span className="me-auto">Total en Banco</span>
           <span className="text-end">
-            ${usuarios.length > 0 ? usuarios[id].banco : "0.00"} <br />
+            ${usuarios.length > 0 ? usuarios[id].banco.toFixed(2) : "0.00"}{" "}
+            <br />
           </span>
         </div>
         <div className="d-flex flex-row">

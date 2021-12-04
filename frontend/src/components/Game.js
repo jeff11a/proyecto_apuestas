@@ -31,15 +31,25 @@ const Game = (props) => {
   const id = process.env.REACT_APP_CLIENTE;
   const urlUsuarios = "http://localhost:3001/usuarios";
   const { eventoActual, eventos, usuarios, setUsuarios } = props;
-  const [eventoGanador, setEventoGanador] = useState("");
+  const [eventoGanador, setEventoGanador] = useState(null);
   const [condicionalGanador, setCondicionalGanador] = useState();
   const [inputValue, setInputValue] = useState("");
   const [updateUsuarios, setUpdateUsuarios] = useState(false);
   const [seleccionEvento, setSeleccionEvento] = useState("0");
+  const [competidorGanador, setCompetidorGanador] = useState(null);
+  const [cantidadGanada, setCantidadGanada] = useState(null);
+  const [paraLaCasaDeApuestas, setParaLaCasaDeApuestas] = useState(null);
+
+  useEffect(() => {
+    setParaLaCasaDeApuestas(null);
+    setCantidadGanada(null);
+    setCompetidorGanador(null);
+    setEventoGanador(null);
+  }, [eventoActual]);
 
   useEffect(() => {
     dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
-  }, [updateUsuarios]);
+  }, [updateUsuarios, setUsuarios]);
 
   const onClick = (event) => {
     //Funcion que toma el atributo value y lo asigna a un state
@@ -82,13 +92,13 @@ const Game = (props) => {
 
       if (window.confirm(`Esta seguro de apostar $${inputValue}?`)) {
         const newSaldo = saldoActual - dineroApostado;
-        console.log(id);
-        console.log(usuarios[4]);
+        setCompetidorGanador(null);
+        setCantidadGanada(null);
+        setParaLaCasaDeApuestas(null);
         const newUser = {
           ...usuarios[id],
           saldo: newSaldo,
         };
-        console.log(newUser);
 
         dataHandler.update(urlUsuarios, id, newUser).then(() => {
           setUpdateUsuarios(!updateUsuarios);
@@ -109,21 +119,47 @@ const Game = (props) => {
           const competidorGanador = utils.getRandomInt(0, 1);
           console.log("ganador", competidorGanador);
 
+          setCompetidorGanador(
+            eventos[eventoActual].participantes[competidorGanador]
+          );
+
           const ganadores = todosLosApostadores.filter(
             (apostador) => apostador.opcion === competidorGanador
           );
+          const monto_grupo_ganador = ganadores
+            ? ganadores.reduce(
+                (acumulador, ganador) => (acumulador += ganador.cantidad),
+                0
+              )
+            : 0;
+
+          const numeroGanadores = ganadores.length;
+          console.log("monto_grupo_ganador ", monto_grupo_ganador);
+
           console.log("ganadores", ganadores);
 
           const perdedores = todosLosApostadores.filter(
             (apostador) => apostador.opcion !== competidorGanador
           );
+
+          const monto_grupo_perdedor = perdedores
+            ? perdedores.reduce(
+                (acumulador, perdedor) => (acumulador += perdedor.cantidad),
+                0
+              )
+            : 0;
           console.log("perdedores", perdedores);
 
           if (ganadores.some((ganador) => ganador.id === usuarios[id].id)) {
             console.log("gano");
             setEventoGanador("Gano");
             setCondicionalGanador(true);
-            ganancia();
+            ganancia({
+              monto_grupo_ganador,
+              monto_grupo_perdedor,
+              dineroApostado,
+              numeroGanadores,
+            });
           } else {
             console.log("perdio");
             setEventoGanador("Perdio");
@@ -137,22 +173,37 @@ const Game = (props) => {
     }
   };
 
-  const ganancia = () => {
+  const ganancia = ({
+    monto_grupo_ganador,
+    monto_grupo_perdedor,
+    dineroApostado,
+    numeroGanadores,
+  }) => {
+    const monto_total = monto_grupo_ganador + monto_grupo_perdedor;
+    const monto_casa_apuesta = monto_total * 0.1;
+    const monto_apuesta =
+      monto_grupo_ganador === dineroApostado
+        ? (monto_total * 0.9) / numeroGanadores
+        : monto_total * 0.9;
+    const factor_ganancia = dineroApostado / monto_grupo_ganador;
+    const monto_ganado = factor_ganancia * monto_apuesta;
+
+    console.log("apostado ", dineroApostado);
+    console.log("ganado", monto_ganado.toFixed(2));
+
     const bancoActual = usuarios[id].banco;
     const saldoActual = usuarios[id].saldo;
     console.log(saldoActual);
     const apostado = Number(inputValue);
-    console.log("entra ganancia");
+    setCantidadGanada(monto_ganado);
+    setParaLaCasaDeApuestas(monto_casa_apuesta);
     if (apostado) {
-      console.log("true apostado");
-      const newSaldo = saldoActual + Number(apostado) * 4;
+      const newSaldo = saldoActual + monto_ganado;
 
       const newUser = {
         ...usuarios[id],
         saldo: newSaldo,
       };
-      console.log("old user", usuarios[id]);
-      console.log("new user", newUser);
 
       dataHandler
         .update(urlUsuarios, id, newUser)
@@ -224,7 +275,9 @@ const Game = (props) => {
                 <div className="modal-body">
                   <div className="text-end bg_darkHeavyMetal text_gold p-2 rounded_15">
                     <span>Saldo actual </span>$
-                    {usuarios.length > 0 ? usuarios[id].saldo : "0.00"}
+                    {usuarios.length > 0
+                      ? usuarios[id].saldo.toFixed(2)
+                      : "0.00"}
                   </div>
                   <div className="d-flex flex-row">
                     <Button
@@ -282,13 +335,27 @@ const Game = (props) => {
                       </p>
                     ))}
 
-                    {condicionalGanador && eventoGanador ? (
-                      <p>Gano</p>
+                    {competidorGanador ? (
+                      <p className="p-2 bg_darkHeavyMetal text_gold rounded_15">
+                        Ganador {competidorGanador}
+                      </p>
+                    ) : null}
+
+                    {condicionalGanador && eventoGanador && cantidadGanada ? (
+                      <p className="p-2 bg_darkHeavyMetal text_greenYellow rounded_15">
+                        Felicidades, acaba de ganar ${cantidadGanada.toFixed(2)}
+                      </p>
                     ) : !condicionalGanador && eventoGanador ? (
                       <p>Perdio</p>
                     ) : (
                       ""
                     )}
+
+                    {paraLaCasaDeApuestas ? (
+                      <p className="p-2 bg_darkHeavyMetal text-white rounded_15">
+                        En casa de apuestas ${paraLaCasaDeApuestas.toFixed(2)}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>

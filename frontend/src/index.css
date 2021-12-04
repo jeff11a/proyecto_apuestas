@@ -12,6 +12,10 @@
   color: #8ac500;
 }
 
+.text_greenYellow {
+  color: greenyellow;
+}
+
 /*Font size*/
 .fs_1-5rem {
   font-size: 1.5rem;
@@ -38,6 +42,10 @@
 .bg_greenPistachio {
   background-color: #8ac500;
 }
+.bg_greenYellow {
+  color: greenyellow;
+}
+
 .bg_bluePrussian {
   background-color: #003b4d;
 }

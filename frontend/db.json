@@ -35,9 +35,9 @@
     {
       "id": 4,
       "nombre": "Jhon",
-      "saldo": 1100000,
+      "saldo": 547499.9999999997,
       "victorias": 0,
-      "banco": 980000,
+      "banco": 1060000,
       "tipo_usuario": "c"
     }
   ],
