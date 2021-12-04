@@ -10,9 +10,10 @@ import Registro from "./routes/Registro";
 import Saldo from "./routes/Saldo";
 import Finalizados from "./routes/Finalizados";
 import Dashboard from "./routes/Dashboard";
-import Dashboard_User from "./routes/Dashboard_User";
-import Dashboard_Bets from "./routes/Dashboard_Bets";
-import Dashboard_Reports from "./routes/Dashboard_Reports";
+import DashboardUser from "./routes/DashboardUser";
+import DashboardAddUser from "./routes/DashboardAddUser";
+import DashboardBets from "./routes/DashboardBets";
+import DashboardReports from "./routes/DashboardReports";
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
@@ -34,9 +35,10 @@ render(
       <Route path="saldo" element={<Saldo />} />
       <Route path="finalizados" element={<Finalizados />} />
       <Route path="dashboard" element={<Dashboard />} />
-      <Route path="dashboard/users" element={<Dashboard_User />} />
-      <Route path="dashboard/bets" element={<Dashboard_Bets />} />
-      <Route path="dashboard/reports" element={<Dashboard_Reports />} />
+      <Route path="dashboard/users" element={<DashboardUser />} />
+      <Route path="dashboard/addUser" element={<DashboardAddUser />} />
+      <Route path="dashboard/bets" element={<DashboardBets />} />
+      <Route path="dashboard/reports" element={<DashboardReports />} />
     </Routes>
   </BrowserRouter>,
   rootElement

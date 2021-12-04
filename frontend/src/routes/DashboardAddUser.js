@@ -2,11 +2,11 @@ import React, { Component } from "react";
 
 import Sidebar2 from "../components/Sidebar2";
 import Navbar2 from "../components/Navbar2";
-import GestionApuestas from "../components/GestionApuestas"
+import AddUser from "../components/dashboard/AddUser";
 
 import "../assets/css/sb-admin-2.css"
 
-export default class Dashboard_Bets extends Component {
+export default class DashboardUser extends Component {
   render() {
     return (
       <React.Fragment>
@@ -15,7 +15,15 @@ export default class Dashboard_Bets extends Component {
           <div id="content-dashboard" className="d-flex flex-column">
             <div id="content">
               <Navbar2></Navbar2>
-              <GestionApuestas></GestionApuestas>
+              <div className="row">
+                  <div className="col">
+                  </div>
+                  <div className="col">
+                    <AddUser></AddUser>
+                  </div>
+                  <div className="col">
+                  </div>
+              </div>
             </div>
           </div>
         </div>

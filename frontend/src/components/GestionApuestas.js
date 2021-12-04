@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import DataTable from "./DatatableBase";
-
-import DataTableExtensions from 'react-data-table-component-extensions';
-import 'react-data-table-component-extensions/dist/index.css';
 
 
-const columns = [
+/* const columns = [
     {
         name: 'Nombres',
         selector: row => row.firstName,
@@ -80,7 +76,7 @@ const data = [
 const tableData = {
         columns,
         data,
-};
+}; */
 
 export default class GestionApuestas extends Component {
     render() {       
@@ -91,10 +87,7 @@ export default class GestionApuestas extends Component {
                     <h1 className="h3 mb-0 text-gray-800">Gestión de Eventos de Apuesta</h1>
                 </div>
                 <div className="row">
-                    <div className="table-responsive col">
-                        <DataTableExtensions {...tableData}>
-                            <DataTable columns={columns} data={data}/>
-                        </DataTableExtensions>                     
+                    <div className="table-responsive col">                    
                     </div>
                 </div>
             </div>

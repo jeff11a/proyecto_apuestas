@@ -138,7 +138,7 @@ export default class HomeDashboard extends Component {
                 </div>
               </div>
 
-              <div class="card-body">
+              <div className="card-body">
                 <Chart />
               </div>
             </div>
