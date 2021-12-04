@@ -9,11 +9,11 @@ import Login from "./routes/Login";
 import Registro from "./routes/Registro";
 import Saldo from "./routes/Saldo";
 import Finalizados from "./routes/Finalizados";
-import Dashboard from "./routes/Dashboard";
+import Dashboard from "./routes/DashboardHome";
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
-//import "../node_modules/@fortawesome/fontawesome-svg-core/styles.css";
+
 import "./index.css";
 import "./components/Navbar.css";
 
