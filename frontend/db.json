@@ -11,7 +11,31 @@
     {
       "id": 1,
       "nombre": "carlos",
-      "saldo": 800000,
+      "saldo": 640000,
+      "victorias": 0,
+      "banco": 980000,
+      "tipo_usuario": "c"
+    },
+    {
+      "id": 2,
+      "nombre": "Marcos",
+      "saldo": 640000,
+      "victorias": 0,
+      "banco": 980000,
+      "tipo_usuario": "c"
+    },
+    {
+      "id": 3,
+      "nombre": "Juan",
+      "saldo": 640000,
+      "victorias": 0,
+      "banco": 980000,
+      "tipo_usuario": "c"
+    },
+    {
+      "id": 4,
+      "nombre": "Jhon",
+      "saldo": 1100000,
       "victorias": 0,
       "banco": 980000,
       "tipo_usuario": "c"

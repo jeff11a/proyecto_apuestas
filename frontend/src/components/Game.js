@@ -38,12 +38,8 @@ const Game = (props) => {
   const [seleccionEvento, setSeleccionEvento] = useState("0");
 
   useEffect(() => {
-    console.log(seleccionEvento);
-  }, [seleccionEvento]);
-
-  useEffect(() => {
     dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
-  }, [updateUsuarios, setUsuarios]);
+  }, [updateUsuarios]);
 
   const onClick = (event) => {
     //Funcion que toma el atributo value y lo asigna a un state
@@ -53,25 +49,26 @@ const Game = (props) => {
 
   const apostadores = [
     {
-      nombre: "Marcos",
-      cantidad: 50000,
-      ganador: null,
-      id: 0,
-      opcion: 1,
-    },
-    {
+      id: 1,
       nombre: "Carlos",
       cantidad: 100000,
       ganador: null,
-      id: 1,
-      opcion: 2,
+      opcion: 1,
     },
     {
+      id: 2,
+      nombre: "Marcos",
+      cantidad: 50000,
+      ganador: null,
+
+      opcion: 0,
+    },
+    {
+      id: 3,
       nombre: "Juan",
       cantidad: 200000,
       ganador: null,
-      id: 2,
-      opcion: 1,
+      opcion: 0,
     },
   ];
 
@@ -85,33 +82,52 @@ const Game = (props) => {
 
       if (window.confirm(`Esta seguro de apostar $${inputValue}?`)) {
         const newSaldo = saldoActual - dineroApostado;
-
+        console.log(id);
+        console.log(usuarios[4]);
         const newUser = {
           ...usuarios[id],
           saldo: newSaldo,
         };
+        console.log(newUser);
 
         dataHandler.update(urlUsuarios, id, newUser).then(() => {
-          console.log("antes update");
           setUpdateUsuarios(!updateUsuarios);
-          console.log("antes switch");
-          console.log(usuarioApuesta);
 
-          switch (usuarioApuesta) {
-            case "0":
-              console.log("perdio");
-              setEventoGanador("Perdio");
-              setCondicionalGanador(false);
-              break;
-            case "1":
-              console.log("gano");
-              setEventoGanador("Gano");
-              setCondicionalGanador(true);
-              ganancia();
-              break;
+          console.log("usuario apuesta", usuarioApuesta);
 
-            default:
-              break;
+          const clienteApostador = {
+            id: usuarios[id].id,
+            nombre: usuarios[id].nombre,
+            cantidad: dineroApostado,
+            ganador: null,
+
+            opcion: Number(usuarioApuesta),
+          };
+          const todosLosApostadores = apostadores.concat(clienteApostador);
+          console.log(todosLosApostadores);
+
+          const competidorGanador = utils.getRandomInt(0, 1);
+          console.log("ganador", competidorGanador);
+
+          const ganadores = todosLosApostadores.filter(
+            (apostador) => apostador.opcion === competidorGanador
+          );
+          console.log("ganadores", ganadores);
+
+          const perdedores = todosLosApostadores.filter(
+            (apostador) => apostador.opcion !== competidorGanador
+          );
+          console.log("perdedores", perdedores);
+
+          if (ganadores.some((ganador) => ganador.id === usuarios[id].id)) {
+            console.log("gano");
+            setEventoGanador("Gano");
+            setCondicionalGanador(true);
+            ganancia();
+          } else {
+            console.log("perdio");
+            setEventoGanador("Perdio");
+            setCondicionalGanador(false);
           }
         });
       }
@@ -124,19 +140,27 @@ const Game = (props) => {
   const ganancia = () => {
     const bancoActual = usuarios[id].banco;
     const saldoActual = usuarios[id].saldo;
+    console.log(saldoActual);
     const apostado = Number(inputValue);
-
+    console.log("entra ganancia");
     if (apostado) {
-      const newSaldo = saldoActual + Number(apostado) * 2;
+      console.log("true apostado");
+      const newSaldo = saldoActual + Number(apostado) * 4;
 
       const newUser = {
         ...usuarios[id],
         saldo: newSaldo,
       };
+      console.log("old user", usuarios[id]);
+      console.log("new user", newUser);
 
       dataHandler
         .update(urlUsuarios, id, newUser)
-        .then(setUpdateUsuarios(!updateUsuarios));
+        .then(() => {
+          setUpdateUsuarios(!updateUsuarios);
+          setUpdateUsuarios(updateUsuarios);
+        })
+        .catch((error) => console.log(error));
     } else {
       console.log("banco ", bancoActual, " apostado ", apostado);
     }
