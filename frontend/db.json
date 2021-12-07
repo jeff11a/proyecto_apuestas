@@ -35,7 +35,7 @@
     {
       "id": 4,
       "nombre": "Jhon",
-      "saldo": 1425000.0000000005,
+      "saldo": 2018666.666666667,
       "victorias": 0,
       "banco": 1060000,
       "tipo_usuario": "c"
@@ -78,5 +78,126 @@
       "activo": true
     }
   ],
-  "historial": []
+  "historial": [
+    {
+      "id": 1,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "Magnus Carlsen",
+      "ganador": "Magnus Carlsen",
+      "fecha": "2021-12-07T04:54:34.325Z",
+      "ganancia": 24666.666666666664,
+      "perdida": 20000
+    },
+    {
+      "id": 2,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "Alexander Alekhine",
+      "ganador": "Alexander Alekhine",
+      "fecha": "2021-12-07T04:56:45.783Z",
+      "ganancia": 55500,
+      "perdida": 20000
+    },
+    {
+      "id": 3,
+      "idUser": 4,
+      "victoria": false,
+      "apuesta": "Magnus Carlsen",
+      "ganador": "Alexander Alekhine",
+      "fecha": "2021-12-07T04:56:54.060Z",
+      "ganancia": 0,
+      "perdida": 20000
+    },
+    {
+      "id": 4,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "José Raúl Capablanca",
+      "ganador": "José Raúl Capablanca",
+      "fecha": "2021-12-07T06:17:01.096Z",
+      "ganancia": 24666.666666666664,
+      "perdida": 20000
+    },
+    {
+      "id": 5,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "José Raúl Capablanca",
+      "ganador": "José Raúl Capablanca",
+      "fecha": "2021-12-07T06:20:21.487Z",
+      "ganancia": 510000,
+      "perdida": 500000
+    },
+    {
+      "id": 6,
+      "idUser": 4,
+      "victoria": false,
+      "apuesta": "Levon Aronian",
+      "ganador": "Hikaru Nakamura",
+      "fecha": "2021-12-07T06:20:36.028Z",
+      "ganancia": 0,
+      "perdida": 50000
+    },
+    {
+      "id": 7,
+      "idUser": 4,
+      "victoria": false,
+      "apuesta": "Magnus Carlsen",
+      "ganador": "Alexander Alekhine",
+      "fecha": "2021-12-07T06:20:57.015Z",
+      "ganancia": 0,
+      "perdida": 20000
+    },
+    {
+      "id": 8,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "Alexander Alekhine",
+      "ganador": "Alexander Alekhine",
+      "fecha": "2021-12-07T06:21:12.288Z",
+      "ganancia": 55500,
+      "perdida": 20000
+    },
+    {
+      "id": 9,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "Paul Morphy",
+      "ganador": "Paul Morphy",
+      "fecha": "2021-12-07T06:27:48.448Z",
+      "ganancia": 120000,
+      "perdida": 50000
+    },
+    {
+      "id": 10,
+      "idUser": 4,
+      "victoria": false,
+      "apuesta": "Hikaru Nakamura",
+      "ganador": "Levon Aronian",
+      "fecha": "2021-12-07T06:28:03.210Z",
+      "ganancia": 0,
+      "perdida": 100000
+    },
+    {
+      "id": 11,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "Alexander Alekhine",
+      "ganador": "Alexander Alekhine",
+      "fecha": "2021-12-07T06:28:19.026Z",
+      "ganancia": 120000,
+      "perdida": 50000
+    },
+    {
+      "id": 12,
+      "idUser": 4,
+      "victoria": false,
+      "apuesta": "Paul Morphy",
+      "ganador": "José Raúl Capablanca",
+      "fecha": "2021-12-07T06:29:37.167Z",
+      "ganancia": 0,
+      "perdida": 500000
+    }
+  ]
 }

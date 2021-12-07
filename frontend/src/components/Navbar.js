@@ -1,6 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
-import { FaChessKing, FaChessKnight, FaTrophy } from "react-icons/fa";
+import {
+  FaChessKing,
+  FaChessKnight,
+  FaTrophy,
+  FaHistory,
+} from "react-icons/fa";
 import { BsSpeedometer } from "react-icons/bs";
 
 const Bar2 = () => {
@@ -17,6 +22,9 @@ const Bar2 = () => {
   let liTagFinalizados = liTag;
   let aTagFinalizados = aTag;
 
+  let liTagHistorial = liTag;
+  let aTagHistorial = aTag;
+
   const changeActiveNavbar = () => {
     switch (pathname) {
       case "/":
@@ -28,6 +36,10 @@ const Bar2 = () => {
         aTagFinalizados += aActive;
         break;
       case "/dashboard":
+        break;
+      case "/historial":
+        liTagHistorial += litActive;
+        aTagHistorial += aActive;
         break;
 
       default:
@@ -55,6 +67,12 @@ const Bar2 = () => {
           <Link to="/finalizados" className={aTagFinalizados}>
             <FaChessKnight className="bi mb-1 fs-4" />
             Eventos finalizados
+          </Link>
+        </li>
+        <li className={liTagHistorial}>
+          <Link to="/historial" className={aTagHistorial}>
+            <FaHistory className="bi mb-1 fs-4" />
+            Historial
           </Link>
         </li>
         <li className={liTag}>

@@ -10,6 +10,7 @@ import Registro from "./routes/Registro";
 import Saldo from "./routes/Saldo";
 import Finalizados from "./routes/Finalizados";
 import Dashboard from "./routes/DashboardHome";
+import { Historial } from "./routes/Historial";
 
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -32,6 +33,7 @@ render(
       <Route path="saldo" element={<Saldo />} />
       <Route path="finalizados" element={<Finalizados />} />
       <Route path="dashboard" element={<Dashboard />} />
+      <Route path="historial" element={<Historial />} />
     </Routes>
   </BrowserRouter>,
   rootElement

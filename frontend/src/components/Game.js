@@ -32,6 +32,8 @@ const Game = (props) => {
     eventoActual,
     eventos,
     usuarios,
+    historial,
+    setHistorial,
     setUsuarios,
     urlUsuarios,
     urlHistorial,
@@ -42,6 +44,7 @@ const Game = (props) => {
   const [condicionalGanador, setCondicionalGanador] = useState();
   const [inputValue, setInputValue] = useState("");
   const [updateUsuarios, setUpdateUsuarios] = useState(false);
+  const [updateHistorial, setUpdateHistorial] = useState(false);
   const [seleccionEvento, setSeleccionEvento] = useState("0");
   const [competidorGanador, setCompetidorGanador] = useState("");
   const [competidorPerdedor, setCompetidorPerdedor] = useState("");
@@ -61,6 +64,10 @@ const Game = (props) => {
   useEffect(() => {
     dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
   }, [updateUsuarios, setUsuarios]);
+
+  useEffect(() => {
+    dataHandler.getAll(urlHistorial).then((values) => setHistorial(values));
+  }, [updateHistorial]);
 
   const onClick = (event) => {
     //Funcion que toma el atributo value y lo asigna a un state
@@ -94,6 +101,7 @@ const Game = (props) => {
   ];
 
   const addUsuarioApuesta = ({
+    id,
     idUser,
     victoria,
     apuesta,
@@ -104,6 +112,7 @@ const Game = (props) => {
   }) => {
     return {
       id,
+      idUser,
       victoria,
       apuesta,
       ganador,
@@ -217,6 +226,7 @@ const Game = (props) => {
             });
           } else {
             const nuevoHistorial = addUsuarioApuesta({
+              id: historial[historial.length - 1].id + 1,
               idUser: usuarios[id].id,
               victoria: false,
               apuesta: apostarPerdedor,
@@ -226,6 +236,14 @@ const Game = (props) => {
               perdida: dineroApostado,
             });
             console.log(JSON.stringify(nuevoHistorial));
+            dataHandler
+              .create(urlHistorial, nuevoHistorial)
+              .then(() => {
+                setUpdateHistorial(!updateHistorial);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
 
             console.log("perdio");
             setEventoGanador("Perdio");
@@ -257,6 +275,7 @@ const Game = (props) => {
     const monto_ganado = factor_ganancia * monto_apuesta;
 
     const nuevoHistorial = addUsuarioApuesta({
+      id: historial[historial.length - 1].id + 1,
       idUser: usuarios[id].id,
       victoria: true,
       apuesta: apostarGanador,
@@ -266,6 +285,15 @@ const Game = (props) => {
       perdida: dineroApostado,
     });
     console.log(JSON.stringify(nuevoHistorial));
+
+    dataHandler
+      .create(urlHistorial, nuevoHistorial)
+      .then(() => {
+        setUpdateHistorial(!updateHistorial);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     console.log("apostado ", dineroApostado);
     console.log("ganado", monto_ganado.toFixed(2));

@@ -12,9 +12,16 @@ function App() {
   const [eventos, setEventos] = useState([]);
   const [eventoActual, setEventoActual] = useState();
   const [usuarios, setUsuarios] = useState([]);
+  const [historial, setHistorial] = useState();
 
   useEffect(() => {
     dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
+  }, []);
+
+  useEffect(() => {
+    dataHandler.getAll(urlHistorial).then((values) => {
+      setHistorial(values);
+    });
   }, []);
 
   useEffect(() => {
@@ -34,6 +41,8 @@ function App() {
           eventos={eventos}
           eventoActual={eventoActual}
           usuarios={usuarios}
+          historial={historial}
+          setHistorial={setHistorial}
           setUsuarios={setUsuarios}
           urlEventos={urlEventos}
           urlUsuarios={urlUsuarios}

@@ -68,6 +68,9 @@
 .rounded_15 {
   border-radius: 15px;
 }
+.rounded_10 {
+  border-radius: 10px;
+}
 .border_bottom_gold {
   border-bottom: 1px solid #ffdf00;
 }
