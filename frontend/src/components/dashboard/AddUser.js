@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import UserDataService from "../../services/UserService";
+
 
 const AddUser = () => {
   const initialUserState = {
@@ -65,12 +67,21 @@ const AddUser = () => {
     {submitted ? (
       <div>
         <h4>Solicitud Exitosa!</h4>
-        <button className="btn btn-success" onClick={newUser}>
-          Guardar
+        <h4>¿Desea agregar otro usuario?</h4>
+        <Link className="btn btn-danger me-2" to="/dashboard/users">
+          Atras
+        </Link>
+        <button className="btn btn-success ms-2" onClick={newUser}>
+          Agregar
         </button>
+        
       </div>
+      
     ) : (
-      <div>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Agregar Usuario</h5>
+          <div>
         <div className="form-group">
           <label htmlFor="firstName">Nombres</label>
           <input
@@ -98,7 +109,7 @@ const AddUser = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">email</label>
+          <label htmlFor="email">Correo</label>
           <input
             type="text"
             className="form-control"
@@ -113,7 +124,7 @@ const AddUser = () => {
         <div className="form-group">
           <label htmlFor="password">Contraseña</label>
           <input
-            type="text"
+            type="password"
             className="form-control"
             id="password"
             required
@@ -164,24 +175,25 @@ const AddUser = () => {
 
         <div className="form-group">
           <label htmlFor="typeUser">Tipo de usuario</label>
-          <input
-            type="text"
-            className="form-control"
-            id="typeUser"
-            required
-            value={user.typeUser}
-            onChange={handleInputChange}
-            name="typeUser"
-          />
+          <select className="form-select" name="typeUser" id="typeUser" onChange={handleInputChange} value={user.typeUser}>
+            <option value="C">Cliente</option>
+            <option value="I">Interno</option>
+            <option value="A">Administrador</option>
+          </select>        
         </div>
-
-        <button onClick={saveUser} className="btn btn-success">
+        <Link to="/dashboard/users" className="btn btn-secondary me-2">
+          Atras
+        </Link>
+        <button onClick={saveUser} className="btn btn-success ms-2">
           Crear Usuario
         </button>
       </div>
+        </div>
+      </div>     
     )}
   </div>
   );
 };
 
 export default AddUser;
+

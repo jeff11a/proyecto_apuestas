@@ -24,8 +24,8 @@ const removeAll = () => {
   return http.delete(`/users`);
 };
 
-const findByEmail = (email) => {
-  return http.get(`/users?email=${email}`);
+const findByName = (name) => {
+  return http.get(`/users?name=${name}`);
 };
 
 const UserService = {
@@ -35,7 +35,7 @@ const UserService = {
   update,
   remove,
   removeAll,
-  findByEmail,
+  findByName,
 };
 
 export default UserService;

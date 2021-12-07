@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes,  Route } from "react-router-dom";
 
 //Paginas
 import App from "./App";
@@ -10,13 +10,18 @@ import Registro from "./routes/Registro";
 import Saldo from "./routes/Saldo";
 import Finalizados from "./routes/Finalizados";
 import Dashboard from "./routes/Dashboard";
-import DashboardUser from "./routes/DashboardUser";
+import UsersList from "./components/dashboard/UsersList";
 import DashboardAddUser from "./routes/DashboardAddUser";
+import User from "./components/dashboard/Users";
 import DashboardBets from "./routes/DashboardBets";
 import DashboardReports from "./routes/DashboardReports";
+import NoPage from "./routes/NoPage";
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
+
+import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
+import "../node_modules/@fortawesome/fontawesome-free/js/all.js";
 //import "../node_modules/@fortawesome/fontawesome-svg-core/styles.css";
 import "./index.css";
 import "./components/Navbar.css";
@@ -30,15 +35,17 @@ render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
-      <Route path="login" element={<Login />} />
-      <Route path="registro" element={<Registro />} />
-      <Route path="saldo" element={<Saldo />} />
-      <Route path="finalizados" element={<Finalizados />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="dashboard/users" element={<DashboardUser />} />
-      <Route path="dashboard/addUser" element={<DashboardAddUser />} />
-      <Route path="dashboard/bets" element={<DashboardBets />} />
-      <Route path="dashboard/reports" element={<DashboardReports />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route path="/saldo" element={<Saldo />} />
+      <Route path="/finalizados" element={<Finalizados />} />
+      <Route path="/dashboard" element={<Dashboard/>} />
+      <Route path="/dashboard/users" element={<UsersList/>} />
+      <Route path="/dashboard/users/:id" element={<User/>} />
+      <Route path="/dashboard/addUser" element={<DashboardAddUser />} />
+      <Route path="/dashboard/bets" element={<DashboardBets />} />
+      <Route path="/dashboard/reports" element={<DashboardReports />} />
+      <Route path="*" element={<NoPage/>}/>
     </Routes>
   </BrowserRouter>,
   rootElement

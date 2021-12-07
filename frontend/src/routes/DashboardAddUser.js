@@ -16,12 +16,12 @@ export default class DashboardUser extends Component {
             <div id="content">
               <Navbar2></Navbar2>
               <div className="row">
-                  <div className="col">
+                  <div className="col-3">
                   </div>
                   <div className="col">
                     <AddUser></AddUser>
                   </div>
-                  <div className="col">
+                  <div className="col-3">
                   </div>
               </div>
             </div>

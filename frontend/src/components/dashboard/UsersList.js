@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import UserDataService from "../../services/UserService";
 import { useTable } from "react-table";
+import Sidebar2 from "../Sidebar2";
+import Navbar2 from "../Navbar2";
 
 const UsersList = (props) => {
+
+  const history = useNavigate();
+
   const [users, setUsers] = useState([]);
-  const [searchEmail, setSearchEmail] = useState("");
+  const [searchName, setSearchName] = useState("");
   const usersRef = useRef();
 
   usersRef.current = users;
@@ -13,9 +19,9 @@ const UsersList = (props) => {
     retrieveUsers();
   }, []);
 
-  const onChangeSearchEmail = (e) => {
-    const searchEmail = e.target.value;
-    setSearchEmail(searchEmail);
+  const onChangeSearchName = (e) => {
+    const searchName = e.target.value;
+    setSearchName(searchName);
   };
 
   const retrieveUsers = () => {
@@ -43,8 +49,8 @@ const UsersList = (props) => {
       });
   };
 
-  const findByEmail = () => {
-    UserDataService.findByEmail(searchEmail)
+  const findByName = () => {
+    UserDataService.findByName(searchName)
       .then((response) => {
         setUsers(response.data);
       })
@@ -55,8 +61,7 @@ const UsersList = (props) => {
 
   const openUser = (rowIndex) => {
     const id = usersRef.current[rowIndex].id;
-
-    props.history.push("/users/" + id);
+    history(`/dashboard/users/${id}`);
   };
 
   const deleteUser = (rowIndex) => {
@@ -64,16 +69,19 @@ const UsersList = (props) => {
 
     UserDataService.remove(id)
       .then((response) => {
-        props.history.push("/users");
+        history("/dashboard/users");
 
         let newUsers = [...usersRef.current];
         newUsers.splice(rowIndex, 1);
 
         setUsers(newUsers);
+
       })
       .catch((e) => {
         console.log(e);
       });
+
+
   };
 
   const columns = useMemo(
@@ -125,7 +133,7 @@ const UsersList = (props) => {
           return (
             <div>
               <span onClick={() => openUser(rowIdx)}>
-                <i className="far fa-edit action mr-2"></i>
+                <i className="far fa-edit action me-2"></i>
               </span>
 
               <span onClick={() => deleteUser(rowIdx)}>
@@ -151,64 +159,103 @@ const UsersList = (props) => {
   });
 
   return (
-    <div className="list row">
-      <div className="col-md-8">
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Buscar por Email"
-            value={searchEmail}
-            onChange={onChangeSearchEmail}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByEmail}
-            >
-              Buscar
-            </button>
+    <div id="dashboard">
+      <Sidebar2 />
+      <div id="content-dashboard" className="d-flex flex-column">
+        <div id="content">
+          <Navbar2 />
+          <div className="container-fluid mt-2">
+            <div className="d-sm-flex align-items-center justify-content-between mb-4">
+              <h1 className="h3 mb-0 text-gray-800">Gestión de Usuarios</h1>
+            </div>
+            <div className="row">
+              <div className="table-responsive col">
+                <div className="list row">
+                  <div className="col-md-8">
+                    <div className="input-group mb-3">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Buscar por Name"
+                        value={searchName}
+                        onChange={onChangeSearchName}
+                      />
+                      <div className="input-group-append">
+                        <button
+                          className="btn btn-outline-secondary"
+                          type="button"
+                          onClick={findByName}
+                        >
+                          Buscar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-12 list">
+                    <table
+                      className="table table-striped table-bordered"
+                      {...getTableProps()}
+                    >
+                      <thead>
+                        {headerGroups.map((headerGroup) => (
+                          <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map((column) => (
+                              <th {...column.getHeaderProps()}>
+                                {column.render("Header")}
+                              </th>
+                            ))}
+                          </tr>
+                        ))}
+                      </thead>
+                      <tbody {...getTableBodyProps()}>
+                        {rows.map((row, i) => {
+                          prepareRow(row);
+                          return (
+                            <tr {...row.getRowProps()}>
+                              {row.cells.map((cell) => {
+                                return (
+                                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                );
+                              })}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="col-md-8">
+                    <button className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#modalDeleteUsers">
+                      Remover todos
+                    </button>
+                    <Link to="/dashboard/addUser" className="btn btn-success mx-2">
+                      Añadir Usuario
+                    </Link>
+                  </div>
+
+                  <div className="modal fade" id="modalDeleteUsers" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">Eliminar todos los usuarios</h5>
+                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                          <h4>¿Desea eliminar todos los usuarios de la lista?</h4>
+                          Al realizar esta accion no se podrá recuparar los datos de la tabla.
+                        </div>
+                        <div className="modal-footer">
+                          <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="button" className="btn btn-danger" onClick={removeAllUsers}>Eliminar Usuarios</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="col-md-12 list">
-        <table
-          className="table table-striped table-bordered"
-          {...getTableProps()}
-        >
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllUsers}>
-          Remover todos
-        </button>
       </div>
     </div>
   );

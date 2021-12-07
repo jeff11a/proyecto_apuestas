@@ -19,7 +19,7 @@ exports.create = (req, res) => {
     phoneNumber: req.body.phoneNumber,
     birthday: req.body.birthday,
     typeUser: req.body.typeUser,
-    active: req.body.active ? req.body.active : false
+    active: req.body.active ? req.body.active : true
   });
 
   // Guardar usuario en la base de datos
@@ -38,8 +38,8 @@ exports.create = (req, res) => {
 
 // Recupere todos los usuarios de la base de datos
 exports.findAll = (req, res) => {
-  const email = req.query.email;
-  var condition = email ? { email: { $regex: new RegExp(email), $options: "i" } } : {};
+  const firstName = req.query.name;
+  var condition = firstName ? { firstName: { $regex: new RegExp(firstName), $options: "i" } } : {};
 
   User.find(condition)
     .then(data => {
