@@ -28,22 +28,33 @@ const Participantes = (props) => {
 };
 
 const Game = (props) => {
+  const {
+    eventoActual,
+    eventos,
+    usuarios,
+    setUsuarios,
+    urlUsuarios,
+    urlHistorial,
+  } = props;
   const id = process.env.REACT_APP_CLIENTE;
-  const urlUsuarios = "http://localhost:3001/usuarios";
-  const { eventoActual, eventos, usuarios, setUsuarios } = props;
+
   const [eventoGanador, setEventoGanador] = useState(null);
   const [condicionalGanador, setCondicionalGanador] = useState();
   const [inputValue, setInputValue] = useState("");
   const [updateUsuarios, setUpdateUsuarios] = useState(false);
   const [seleccionEvento, setSeleccionEvento] = useState("0");
-  const [competidorGanador, setCompetidorGanador] = useState(null);
+  const [competidorGanador, setCompetidorGanador] = useState("");
+  const [competidorPerdedor, setCompetidorPerdedor] = useState("");
+
   const [cantidadGanada, setCantidadGanada] = useState(null);
   const [paraLaCasaDeApuestas, setParaLaCasaDeApuestas] = useState(null);
 
   useEffect(() => {
+    //Cada vez que se cambia de evento se reinician los states que dan informacion
     setParaLaCasaDeApuestas(null);
     setCantidadGanada(null);
     setCompetidorGanador(null);
+    setCompetidorPerdedor(null);
     setEventoGanador(null);
   }, [eventoActual]);
 
@@ -82,6 +93,26 @@ const Game = (props) => {
     },
   ];
 
+  const addUsuarioApuesta = ({
+    idUser,
+    victoria,
+    apuesta,
+    ganador,
+    fecha,
+    ganancia,
+    perdida,
+  }) => {
+    return {
+      id,
+      victoria,
+      apuesta,
+      ganador,
+      fecha,
+      ganancia,
+      perdida,
+    };
+  };
+
   const apostar = (event) => {
     event.preventDefault();
     setEventoGanador("");
@@ -93,6 +124,7 @@ const Game = (props) => {
       if (window.confirm(`Esta seguro de apostar $${inputValue}?`)) {
         const newSaldo = saldoActual - dineroApostado;
         setCompetidorGanador(null);
+        setCompetidorPerdedor(null);
         setCantidadGanada(null);
         setParaLaCasaDeApuestas(null);
         const newUser = {
@@ -116,15 +148,33 @@ const Game = (props) => {
           const todosLosApostadores = apostadores.concat(clienteApostador);
           console.log(todosLosApostadores);
 
-          const competidorGanador = utils.getRandomInt(0, 1);
-          console.log("ganador", competidorGanador);
+          const indexGanador = utils.getRandomInt(0, 1);
 
           setCompetidorGanador(
-            eventos[eventoActual].participantes[competidorGanador]
+            eventos[eventoActual].participantes[indexGanador]
           );
 
+          const apostarGanador =
+            eventos[eventoActual].participantes[indexGanador];
+
+          setCompetidorPerdedor(
+            eventos[eventoActual].participantes.find(
+              (participante) =>
+                participante !==
+                eventos[eventoActual].participantes[indexGanador]
+            )
+          );
+
+          const apostarPerdedor = eventos[eventoActual].participantes.find(
+            (participante) =>
+              participante !== eventos[eventoActual].participantes[indexGanador]
+          );
+
+          console.log("ganador ", apostarGanador);
+          console.log("perdedor ", apostarPerdedor);
+
           const ganadores = todosLosApostadores.filter(
-            (apostador) => apostador.opcion === competidorGanador
+            (apostador) => apostador.opcion === indexGanador
           );
           const monto_grupo_ganador = ganadores
             ? ganadores.reduce(
@@ -139,7 +189,7 @@ const Game = (props) => {
           console.log("ganadores", ganadores);
 
           const perdedores = todosLosApostadores.filter(
-            (apostador) => apostador.opcion !== competidorGanador
+            (apostador) => apostador.opcion !== indexGanador
           );
 
           const monto_grupo_perdedor = perdedores
@@ -149,9 +199,11 @@ const Game = (props) => {
               )
             : 0;
           console.log("perdedores", perdedores);
+          const isodate = new Date().toISOString();
 
           if (ganadores.some((ganador) => ganador.id === usuarios[id].id)) {
             console.log("gano");
+
             setEventoGanador("Gano");
             setCondicionalGanador(true);
             ganancia({
@@ -159,8 +211,22 @@ const Game = (props) => {
               monto_grupo_perdedor,
               dineroApostado,
               numeroGanadores,
+              indexGanador,
+              apostarGanador,
+              isodate,
             });
           } else {
+            const nuevoHistorial = addUsuarioApuesta({
+              idUser: usuarios[id].id,
+              victoria: false,
+              apuesta: apostarPerdedor,
+              ganador: apostarGanador,
+              fecha: isodate,
+              ganancia: 0,
+              perdida: dineroApostado,
+            });
+            console.log(JSON.stringify(nuevoHistorial));
+
             console.log("perdio");
             setEventoGanador("Perdio");
             setCondicionalGanador(false);
@@ -178,6 +244,8 @@ const Game = (props) => {
     monto_grupo_perdedor,
     dineroApostado,
     numeroGanadores,
+    isodate,
+    apostarGanador,
   }) => {
     const monto_total = monto_grupo_ganador + monto_grupo_perdedor;
     const monto_casa_apuesta = monto_total * 0.1;
@@ -187,6 +255,17 @@ const Game = (props) => {
         : monto_total * 0.9;
     const factor_ganancia = dineroApostado / monto_grupo_ganador;
     const monto_ganado = factor_ganancia * monto_apuesta;
+
+    const nuevoHistorial = addUsuarioApuesta({
+      idUser: usuarios[id].id,
+      victoria: true,
+      apuesta: apostarGanador,
+      ganador: apostarGanador,
+      fecha: isodate,
+      ganancia: monto_ganado,
+      perdida: dineroApostado,
+    });
+    console.log(JSON.stringify(nuevoHistorial));
 
     console.log("apostado ", dineroApostado);
     console.log("ganado", monto_ganado.toFixed(2));

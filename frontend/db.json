@@ -35,7 +35,7 @@
     {
       "id": 4,
       "nombre": "Jhon",
-      "saldo": 547499.9999999997,
+      "saldo": 1425000.0000000005,
       "victorias": 0,
       "banco": 1060000,
       "tipo_usuario": "c"
@@ -57,8 +57,7 @@
         "Magnus Carlsen",
         "Alexander Alekhine"
       ],
-      "activo": true,
-      "apuestas": []
+      "activo": true
     },
     {
       "id": 1,
@@ -78,5 +77,6 @@
       ],
       "activo": true
     }
-  ]
+  ],
+  "historial": []
 }

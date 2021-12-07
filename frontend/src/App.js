@@ -6,20 +6,19 @@ import { useState, useEffect } from "react";
 import dataHandler from "./services/dataHandler";
 
 function App() {
+  const urlUsuarios = "http://localhost:3001/usuarios";
+  const urlHistorial = "http://localhost:3001/historial";
+  const urlEventos = "http://localhost:3001/eventos";
   const [eventos, setEventos] = useState([]);
   const [eventoActual, setEventoActual] = useState();
   const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    dataHandler
-      .getAll("http://localhost:3001/usuarios")
-      .then((values) => setUsuarios(values));
+    dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
   }, []);
 
   useEffect(() => {
-    dataHandler
-      .getAll("http://localhost:3001/eventos")
-      .then((values) => setEventos(values));
+    dataHandler.getAll(urlEventos).then((values) => setEventos(values));
   }, []);
 
   return (
@@ -36,6 +35,9 @@ function App() {
           eventoActual={eventoActual}
           usuarios={usuarios}
           setUsuarios={setUsuarios}
+          urlEventos={urlEventos}
+          urlUsuarios={urlUsuarios}
+          urlHistorial={urlHistorial}
         />
       </div>
     </div>
