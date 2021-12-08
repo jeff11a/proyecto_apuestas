@@ -1,33 +1,33 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import UserDataService from "../../services/UserService";
+import BetDataService from "../../services/BetService";
 import { useTable } from "react-table";
 import Sidebar2 from "../Sidebar2";
 import Navbar2 from "../Navbar2";
 
-const UsersList = (props) => {
+const BetsList = (props) => {
 
   const history = useNavigate();
 
-  const [users, setUsers] = useState([]);
-  const [searchName, setSearchName] = useState("");
-  const usersRef = useRef();
+  const [bets, setBets] = useState([]);
+  const [searchPlayer, setSearchPlayer] = useState("");
+  const betsRef = useRef();
 
-  usersRef.current = users;
+  betsRef.current = bets;
 
   useEffect(() => {
-    retrieveUsers();
+    retrieveBets();
   }, []);
 
-  const onChangeSearchName = (e) => {
-    const searchName = e.target.value;
-    setSearchName(searchName);
+  const onChangeSearchPlayer = (e) => {
+    const searchPlayer = e.target.value;
+    setSearchPlayer(searchPlayer);
   };
 
-  const retrieveUsers = () => {
-    UserDataService.getAll()
+  const retrieveBets = () => {
+    BetDataService.getAll()
       .then((response) => {
-        setUsers(response.data);
+        setBets(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -35,11 +35,11 @@ const UsersList = (props) => {
   };
 
   const refreshList = () => {
-    retrieveUsers();
+    retrieveBets();
   };
 
-  const removeAllUsers = () => {
-    UserDataService.removeAll()
+  const removeAllBets = () => {
+    BetDataService.removeAll()
       .then((response) => {
         console.log(response.data);
         refreshList();
@@ -49,32 +49,32 @@ const UsersList = (props) => {
       });
   };
 
-  const findByName = () => {
-    UserDataService.findByName(searchName)
+  const findByPlayer = () => {
+    BetDataService.findByPlayer(searchPlayer)
       .then((response) => {
-        setUsers(response.data);
+        setBets(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  const openUser = (rowIndex) => {
-    const id = usersRef.current[rowIndex].id;
-    history(`/dashboard/users/${id}`);
+  const openBet = (rowIndex) => {
+    const id = betsRef.current[rowIndex].id;
+    history(`/dashboard/bets/${id}`);
   };
 
-  const deleteUser = (rowIndex) => {
-    const id = usersRef.current[rowIndex].id;
+  const deleteBet = (rowIndex) => {
+    const id = betsRef.current[rowIndex].id;
 
-    UserDataService.remove(id)
+    BetDataService.remove(id)
       .then((response) => {
-        history("/dashboard/users");
+        history("/dashboard/bets");
 
-        let newUsers = [...usersRef.current];
-        newUsers.splice(rowIndex, 1);
+        let newBets = [...betsRef.current];
+        newBets.splice(rowIndex, 1);
 
-        setUsers(newUsers);
+        setBets(newBets);
 
       })
       .catch((e) => {
@@ -87,40 +87,48 @@ const UsersList = (props) => {
   const columns = useMemo(
     () => [
       {
-        Header: "Nombres",
-        accessor: "firstName",
+        Header: "Jugador 1",
+        accessor: "player1",
       },
       {
-        Header: "Apellidos",
-        accessor: "lastName",
+        Header: "Jugador 2",
+        accessor: "player2",
       },
       {
-        Header: "Correo",
-        accessor: "email",
+        Header: "Torneo",
+        accessor: "torneo",
       },
       {
-        Header: "Contraseña",
-        accessor: "password",
+        Header: "Apuestas J1",
+        accessor: "totalP1",
       },
       {
-        Header: "País",
-        accessor: "country",
+        Header: "Saldo J1",
+        accessor: "saldoP1",
       },
       {
-        Header: "Teléfono",
-        accessor: "phoneNumber",
+        Header: "Apuesta J2",
+        accessor: "totalP2",
       },
       {
-        Header: "Fecha de Nacimiento",
-        accessor: "birthday",
+        Header: "Saldo J2",
+        accessor: "saldoP2",
       },
       {
-        Header: "Tipo de Usuario",
-        accessor: "typeUser",
+        Header: "Total",
+        accessor: "saldoTotal",
+      },
+      {
+        Header: "Estado",
+        accessor: "estado",
+      },
+      {
+        Header: "Ganador",
+        accessor: "ganador",
       },
       {
         Header: "Activo",
-        accessor: "active",
+        accessor: "activo",
         Cell: (props) => {
           return props.value ? "Activo" : "Inactivo";
         },
@@ -132,11 +140,11 @@ const UsersList = (props) => {
           const rowIdx = props.row.id;
           return (
             <div>
-              <span onClick={() => openUser(rowIdx)}>
+              <span onClick={() => openBet(rowIdx)}>
                 <i className="far fa-edit action me-2"></i>
               </span>
 
-              <span onClick={() => deleteUser(rowIdx)}>
+              <span onClick={() => deleteBet(rowIdx)}>
                 <i className="fas fa-trash action"></i>
               </span>
             </div>
@@ -155,7 +163,7 @@ const UsersList = (props) => {
     prepareRow,
   } = useTable({
     columns,
-    data: users,
+    data: bets,
   });
 
   return (
@@ -166,7 +174,7 @@ const UsersList = (props) => {
           <Navbar2 />
           <div className="container-fluid mt-2">
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
-              <h1 className="h3 mb-0 text-gray-800">Gestión de Usuarios</h1>
+              <h1 className="h3 mb-0 text-gray-800">Gestión de Eventos de Apuesta</h1>
             </div>
             <div className="row">
               <div className="table-responsive col">
@@ -176,15 +184,15 @@ const UsersList = (props) => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Buscar por nombre"
-                        value={searchName}
-                        onChange={onChangeSearchName}
+                        placeholder="Buscar por player"
+                        value={searchPlayer}
+                        onChange={onChangeSearchPlayer}
                       />
                       <div className="input-group-append">
                         <button
                           className="btn btn-outline-secondary"
                           type="button"
-                          onClick={findByName}
+                          onClick={findByPlayer}
                         >
                           Buscar
                         </button>
@@ -225,28 +233,28 @@ const UsersList = (props) => {
                   </div>
 
                   <div className="col-md-8">
-                    <button className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#modalDeleteUsers">
+                    <button className="btn btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#modalDeleteBets">
                       Remover todos
                     </button>
-                    <Link to="/dashboard/addUser" className="btn btn-success mx-2">
-                      Añadir Usuario
+                    <Link to="/dashboard/addBet" className="btn btn-success mx-2">
+                      Añadir Evento
                     </Link>
                   </div>
 
-                  <div className="modal fade" id="modalDeleteUsers" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal fade" id="modalDeleteBets" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                       <div className="modal-content">
                         <div className="modal-header">
-                          <h5 className="modal-title" id="exampleModalLabel">Eliminar todos los usuarios</h5>
+                          <h5 className="modal-title" id="exampleModalLabel">Eliminar todos los Eventos</h5>
                           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                          <h4>¿Desea eliminar todos los usuarios de la lista?</h4>
+                          <h4>¿Desea eliminar todos los eventos de la tabla?</h4>
                           Al realizar esta accion no se podrá recuparar los datos de la tabla.
                         </div>
                         <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                          <button type="button" className="btn btn-danger" onClick={removeAllUsers}>Eliminar Usuarios</button>
+                          <button type="button" className="btn btn-danger" onClick={removeAllBets}>Eliminar Eventos</button>
                         </div>
                       </div>
                     </div>
@@ -261,4 +269,4 @@ const UsersList = (props) => {
   );
 };
 
-export default UsersList;
+export default BetsList;

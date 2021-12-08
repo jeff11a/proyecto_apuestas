@@ -78,9 +78,9 @@ const AddUser = () => {
       </div>
       
     ) : (
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">Agregar Usuario</h5>
+      <div className="card mb-3">
+        <div className="card-body">
+          <h5 className="card-title">Agregar Usuario</h5>
           <div>
         <div className="form-group">
           <label htmlFor="firstName">Nombres</label>

@@ -72,6 +72,7 @@ const User = (props) => {
       .then(response => {
         console.log(response.data);
         setMessage("¡El usuario se actualizó correctamente!");
+        history("/dashboard/users");
       })
       .catch(e => {
         console.log(e);
@@ -199,15 +200,11 @@ const User = (props) => {
 
                       <div className="form-group">
                         <label htmlFor="typeUser">Tipo de usuario</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="typeUser"
-                          required
-                          value={currentUser.typeUser}
-                          onChange={handleInputChange}
-                          name="typeUser"
-                        />
+                        <select className="form-select" name="typeUser" id="typeUser" onChange={handleInputChange} value={currentUser.typeUser}>
+                          <option value="C">Cliente</option>
+                          <option value="I">Interno</option>
+                          <option value="A">Administrador</option>
+                        </select>        
                       </div>
 
                       <div className="form-group">

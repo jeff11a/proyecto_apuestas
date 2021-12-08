@@ -113,7 +113,7 @@ exports.delete = (req, res) => {
     })
     .catch(err => {
       res.status(500).send({
-        message: "No se pudo eliminar el tutorial con id = " + id
+        message: "No se pudo eliminar el usuario con id = " + id
       });
     });
 };
@@ -149,7 +149,7 @@ exports.findAllActive = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Se produjo un error al recuperar los ususrios."
+          err.message || "Se produjo un error al recuperar los usuarios."
       });
     });
 };

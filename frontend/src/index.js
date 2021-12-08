@@ -12,9 +12,11 @@ import Finalizados from "./routes/Finalizados";
 import Dashboard from "./routes/Dashboard";
 import UsersList from "./components/dashboard/UsersList";
 import DashboardAddUser from "./routes/DashboardAddUser";
+import DashboardAddBet from "./routes/DashboardAddBet";
 import User from "./components/dashboard/Users";
-import DashboardBets from "./routes/DashboardBets";
-import DashboardReports from "./routes/DashboardReports";
+import Bets from "./components/dashboard/Bets";
+import BetsList from "./components/dashboard/BetsList";
+import Reports from "./components/dashboard/Reports";
 import NoPage from "./routes/NoPage";
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -43,8 +45,10 @@ render(
       <Route path="/dashboard/users" element={<UsersList/>} />
       <Route path="/dashboard/users/:id" element={<User/>} />
       <Route path="/dashboard/addUser" element={<DashboardAddUser />} />
-      <Route path="/dashboard/bets" element={<DashboardBets />} />
-      <Route path="/dashboard/reports" element={<DashboardReports />} />
+      <Route path="/dashboard/bets" element={<BetsList />} />
+      <Route path="/dashboard/bets/:id" element={<Bets />} />
+      <Route path="/dashboard/addBet" element={<DashboardAddBet />} />
+      <Route path="/dashboard/reports" element={<Reports />} />
       <Route path="*" element={<NoPage/>}/>
     </Routes>
   </BrowserRouter>,
