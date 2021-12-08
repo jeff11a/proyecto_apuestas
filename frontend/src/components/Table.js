@@ -54,7 +54,7 @@ const Table = () => {
 
   return (
     <>
-      <div className="col-md-10">
+      <div className="col-md-10 col-sm-12">
         <GlobalFilterDebouncing
           filter={globalFilter}
           setFilter={setGlobalFilter}

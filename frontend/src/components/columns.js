@@ -34,15 +34,9 @@ export const COLUMNS = [
   {
     Header: "Ganancia",
     accessor: "ganancia",
-    cell: ({ value }) => {
-      return value.toFixed(2);
-    },
   },
   {
     Header: "Perdida",
     accessor: "perdida",
-    cell: ({ value }) => {
-      return value.toFixed(2);
-    },
   },
 ];

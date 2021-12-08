@@ -18,6 +18,7 @@ const Participantes = (props) => {
       onChange={(event) => {
         setSeleccionEvento(event.target.value);
       }}
+      className="border border-1 p-2 m-2 me-auto rounded_10"
     >
       <option value="0" defaultValue>
         {participante1}
@@ -193,9 +194,6 @@ const Game = (props) => {
             : 0;
 
           const numeroGanadores = ganadores.length;
-          console.log("monto_grupo_ganador ", monto_grupo_ganador);
-
-          console.log("ganadores", ganadores);
 
           const perdedores = todosLosApostadores.filter(
             (apostador) => apostador.opcion !== indexGanador
@@ -207,7 +205,7 @@ const Game = (props) => {
                 0
               )
             : 0;
-          console.log("perdedores", perdedores);
+
           const isodate = new Date().toISOString();
 
           if (ganadores.some((ganador) => ganador.id === usuarios[id].id)) {
@@ -253,7 +251,7 @@ const Game = (props) => {
       }
       //Cuando se da click en apostar se resta del saldo el dinero a espera si gano
     } else {
-      console.log("No es un numero");
+      alert("Debe ingresar un valor");
     }
   };
 
@@ -275,7 +273,10 @@ const Game = (props) => {
     const monto_ganado = factor_ganancia * monto_apuesta;
 
     const nuevoHistorial = addUsuarioApuesta({
-      id: historial[historial.length - 1].id + 1,
+      id:
+        historial.length > 0
+          ? historial[historial.length - 1].id + 1
+          : historial.length,
       idUser: usuarios[id].id,
       victoria: true,
       apuesta: apostarGanador,
@@ -315,8 +316,7 @@ const Game = (props) => {
       dataHandler
         .update(urlUsuarios, id, newUser)
         .then(() => {
-          setUpdateUsuarios(!updateUsuarios);
-          setUpdateUsuarios(updateUsuarios);
+          updateUsuarios ? setUpdateUsuarios(false) : setUpdateUsuarios(false);
         })
         .catch((error) => console.log(error));
     } else {
@@ -386,7 +386,7 @@ const Game = (props) => {
                       ? usuarios[id].saldo.toFixed(2)
                       : "0.00"}
                   </div>
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row ">
                     <Button
                       txt="20k"
                       value="20000"
@@ -411,7 +411,7 @@ const Game = (props) => {
                       onClick={onClick}
                       className={btnMoney}
                     />
-                    <FaDollarSign className="fs-4 mt-2" />
+                    <FaDollarSign className="fs-4 mt-2 text_darkHeavyMetal ms-auto" />
                     <input
                       type="text"
                       className="inputApostar rounded_15 shadow "
@@ -421,24 +421,34 @@ const Game = (props) => {
                       onChange={onClick}
                     />
                   </div>
+                  <div className="d-flex align-items-center">
+                    {eventos[eventoActual] ? (
+                      <Participantes
+                        evento={eventos[eventoActual]}
+                        setSeleccionEvento={setSeleccionEvento}
+                      />
+                    ) : null}
 
-                  {eventos[eventoActual] ? (
-                    <Participantes
-                      evento={eventos[eventoActual]}
-                      setSeleccionEvento={setSeleccionEvento}
-                    />
-                  ) : null}
+                    <button
+                      className="btn btn-md rounded_10 text_darkHeavyMetal  bg_gold  shadow ms-auto"
+                      onClick={apostar}
+                    >
+                      Apostar
+                    </button>
+                  </div>
 
-                  <button
-                    className="btn bg_gold btn1 shadow me-2"
-                    onClick={apostar}
-                  >
-                    Apostar
-                  </button>
                   <div className="text-start text_darkHeavyMetal">
                     {apostadores.map((apostador) => (
                       <p key={apostador.id}>
-                        Usuario {apostador.nombre} aposto ${apostador.cantidad}
+                        Usuario {apostador.nombre} aposto ${apostador.cantidad}{" "}
+                        a{" "}
+                        {eventos.length > 0 &&
+                        apostadores.length > 0 &&
+                        eventoActual
+                          ? eventos[eventoActual].participantes[
+                              apostador.opcion
+                            ]
+                          : null}
                       </p>
                     ))}
 
