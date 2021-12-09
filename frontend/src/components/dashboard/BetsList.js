@@ -99,6 +99,10 @@ const BetsList = (props) => {
         accessor: "torneo",
       },
       {
+        Header: "Modalidad",
+        accessor: "modalidad",
+      },
+      {
         Header: "Apuestas J1",
         accessor: "totalP1",
       },
@@ -184,7 +188,7 @@ const BetsList = (props) => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Buscar por player"
+                        placeholder="Buscar..."
                         value={searchPlayer}
                         onChange={onChangeSearchPlayer}
                       />
@@ -241,7 +245,7 @@ const BetsList = (props) => {
                     </Link>
                   </div>
 
-                  <div className="modal fade" id="modalDeleteBets" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal fade" id="modalDeleteBets" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                       <div className="modal-content">
                         <div className="modal-header">

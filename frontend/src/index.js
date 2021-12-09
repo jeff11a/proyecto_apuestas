@@ -24,6 +24,7 @@ import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
 
 import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
 import "../node_modules/@fortawesome/fontawesome-free/js/all.js";
+
 //import "../node_modules/@fortawesome/fontawesome-svg-core/styles.css";
 import "./index.css";
 import "./components/Navbar.css";
@@ -31,6 +32,7 @@ import "./components/Sidebar1.css";
 import "./components/Game.css";
 import "./routes/Saldo.css";
 
+//import "./assets/js/sb-admin-2"
 const rootElement = document.getElementById("root");
 
 render(

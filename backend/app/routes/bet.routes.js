@@ -3,25 +3,33 @@ module.exports = app => {
   
     var router = require("express").Router();
   
-    // Create a new Tutorial
+    // Crear nuevo evento de apuesta
     router.post("/", bets.create);
   
-    // Retrieve all Tutorials
+    // Retrieve all bets
     router.get("/", bets.findAll);
+
+    router.get("/finished", bets.findAllFinished);
+
+    router.get("/countFinished", bets.countFinished);
+
+    router.get("/countAll", bets.countAll);
+
+    router.get("/countActive", bets.countActive);
   
-    // Retrieve all published Tutorials
+    // Retrieve all published bets
     router.get("/active", bets.findAllActive);
   
-    // Retrieve a single Tutorial with id
+    // Retrieve a single bet with id
     router.get("/:id", bets.findOne);
   
-    // Update a Tutorial with id
+    // Update a bet with id
     router.put("/:id", bets.update);
   
-    // Delete a Tutorial with id
+    // Delete a bet with id
     router.delete("/:id", bets.delete);
   
-    // Create a new Tutorial
+    // Create a new bet
     router.delete("/", bets.deleteAll);
   
     app.use("/api/bets", router);

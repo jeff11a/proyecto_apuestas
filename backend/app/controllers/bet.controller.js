@@ -42,8 +42,8 @@ exports.create = (req, res) => {
 
 // Recupere todos los eventos de la base de datos
 exports.findAll = (req, res) => {
-  const player1 = req.query.player1;
-  var condition = player1 ? { player1: { $regex: new RegExp(player1), $options: "i" } } : {};
+  const player = req.query.player;
+  var condition = player ? { $or: [{ player1: { $regex: new RegExp(player), $options: "i" } }, { player2: { $regex: new RegExp(player), $options: "i" } }, { torneo: { $regex: new RegExp(player), $options: "i" } }] } : {};
 
   Bet.find(condition)
     .then(data => {
@@ -126,11 +126,11 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   Bet.deleteMany({})
     .then(data => {
-      if(data.deletedCount == 1){
+      if (data.deletedCount == 1) {
         res.send({
           message: `¡Los eventos de apuesta se eliminaron con éxito!`
         });
-      }else{
+      } else {
         res.send({
           message: `¡Los ${data.deletedCount} eventos de apuesta se eliminaron con éxito!`
         });
@@ -156,4 +156,61 @@ exports.findAllActive = (req, res) => {
           err.message || "Se produjo un error al recuperar los eventos de apuesta."
       });
     });
+};
+
+// Encuentra todos los eventos activos
+exports.findAllFinished = (req, res) => {
+  Bet.find({ estado: "Finalizado" })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Se produjo un error al recuperar los eventos de apuesta finalizados."
+      });
+    });
+};
+
+//contar eventos de apuestas finalizados
+exports.countFinished = (req, res) => {
+  Bet.countDocuments({ estado: "Finalizado"})
+  .then(count => {
+    res.send({cont: count});
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+       err.message || "No se pudo contar los eventos finalizados"
+    });
+  });
+};
+
+//Contar eventos de apuestas disponibles
+
+exports.countActive = (req, res) => {
+  Bet.countDocuments({ $or: [{estado: /Disponible/i}, {estado: /Jugando/i}] })
+  .then(count => {
+    res.send({cont: count});
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+       err.message || "No se pudo contar los eventos disponibles"
+    });
+  });
+};
+
+//contar todos los eventos
+exports.countAll = (req, res) => {
+  Bet.countDocuments()
+  .then(count => {
+    res.send({cont: count});
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+       err.message || "No se pudo contar los eventos"
+    });
+  });
 };

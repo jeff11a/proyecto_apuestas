@@ -28,6 +28,14 @@ const findByName = (name) => {
   return http.get(`/users?name=${name}`);
 };
 
+const countUser = () => {
+  return http.get("/users/count");
+};
+
+const countUserCLient = () => {
+  return http.get(`/users/countClient`);
+};
+
 const UserService = {
   getAll,
   get,
@@ -36,6 +44,8 @@ const UserService = {
   remove,
   removeAll,
   findByName,
+  countUser,
+  countUserCLient
 };
 
 export default UserService;

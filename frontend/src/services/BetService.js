@@ -28,6 +28,18 @@ const findByPlayer = (player) => {
   return http.get(`/bets?player=${player}`);
 };
 
+const countFinished = () => {
+  return http.get("/bets/countFinished");
+};
+
+const countActive = () => {
+  return http.get("/bets/countActive");
+};
+
+const countAll = () => {
+  return http.get("/bets/countAll");
+};
+
 const BetService = {
   getAll,
   get,
@@ -36,6 +48,9 @@ const BetService = {
   remove,
   removeAll,
   findByPlayer,
+  countFinished,
+  countActive,
+  countAll
 };
 
 export default BetService;

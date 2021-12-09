@@ -19,6 +19,8 @@ exports.create = (req, res) => {
     phoneNumber: req.body.phoneNumber,
     birthday: req.body.birthday,
     typeUser: req.body.typeUser,
+    balance: req.body.balance,
+    bets: req.body.bets,
     active: req.body.active ? req.body.active : true
   });
 
@@ -39,8 +41,7 @@ exports.create = (req, res) => {
 // Recupere todos los usuarios de la base de datos
 exports.findAll = (req, res) => {
   const firstName = req.query.name;
-  var condition = firstName ? { firstName: { $regex: new RegExp(firstName), $options: "i" } } : {};
-
+  var condition = firstName ? {$or: [{ firstName: { $regex: new RegExp(firstName), $options: "i" } }, { lastName: { $regex: new RegExp(firstName), $options: "i" }}, { email: { $regex: new RegExp(firstName), $options: "i" }}] } : {};
   User.find(condition)
     .then(data => {
       res.send(data);
@@ -152,4 +153,37 @@ exports.findAllActive = (req, res) => {
           err.message || "Se produjo un error al recuperar los usuarios."
       });
     });
+};
+
+//Contador de usuarios
+/* 
+, function (err, count) {
+    console.log('hay %d usuarios', count);
+  }
+*/
+exports.countUser = (req, res) => {
+  User.countDocuments()
+  .then(count => {
+    res.send({cont: count});
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+       err.message || "No se pudo contar los usuarios"
+    });
+  });
+}
+
+//Contador de usuarios cliente
+exports.countUserClient = (req, res) => {
+  const nUser = User.countDocuments({ typeUser: "C"})
+  .then(count => {
+    res.send({cont: count});
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+       err.message || "No se pudo contar los usuarios clientes"
+    });
+  });
 };

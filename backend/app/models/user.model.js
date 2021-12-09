@@ -9,7 +9,16 @@ module.exports = mongoose => {
       phoneNumber: Number,
       birthday: Date,
       typeUser: String,
-      active: Boolean
+      active: Boolean,
+      balance: Number,
+      bets: [
+        {
+          id: String,
+          status: String,
+          value: Number,
+          player: String
+        }
+      ]
     },
     { timestamps: true }
   );

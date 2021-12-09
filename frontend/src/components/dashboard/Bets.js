@@ -13,13 +13,13 @@ const Bet = (props) => {
         player1: "",
         player2: "",
         torneo: "",
-        modalidad: "clasico",
+        modalidad: "",
         totalP1: 0,
         saldoP1: 0,
         totalP2: 0,
         saldoP2: 0,
         saldoTotal: 0,
-        estado: "disponible",
+        estado: "",
         apostadores: [],
         ganador: "",
         activo: true
@@ -158,21 +158,21 @@ const Bet = (props) => {
                                             <div className="form-group">
                                                 <label htmlFor="modalidad">Modalidad</label>
                                                 <select className="form-select" name="modalidad" id="modalidad" onChange={handleInputChange} value={currentBet.modalidad}>
-                                                    <option value="clasico">Clasico</option>
-                                                    <option value="rapido">Rápido</option>
-                                                    <option value="relampago">Relámpago</option>
-                                                    <option value="bullet">Bullet</option>
-                                                    <option value="online">En línea</option>
+                                                    <option value="Clasico">Clasico</option>
+                                                    <option value="Rapido">Rápido</option>
+                                                    <option value="Relampago">Relámpago</option>
+                                                    <option value="Bullet">Bullet</option>
+                                                    <option value="Online">En línea</option>
                                                 </select>
                                             </div>
 
                                             <div className="form-group">
                                                 <label htmlFor="typeBet">Estado</label>
                                                 <select className="form-select" name="estado" id="estado" onChange={handleInputChange} value={currentBet.estado}>
-                                                    <option value="disponible">Disponible</option>
-                                                    <option value="finalizado">Finalizado</option>
-                                                    <option value="jugando">Jugando</option>
-                                                    <option value="cancelado">Cancelado</option>
+                                                    <option value="Disponible">Disponible</option>
+                                                    <option value="Finalizado">Finalizado</option>
+                                                    <option value="Jugando">Jugando</option>
+                                                    <option value="Cancelado">Cancelado</option>
                                                 </select>
                                             </div>
 

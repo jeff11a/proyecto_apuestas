@@ -176,7 +176,7 @@ const UsersList = (props) => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder="Buscar por nombre"
+                        placeholder="Buscar..."
                         value={searchName}
                         onChange={onChangeSearchName}
                       />
@@ -233,7 +233,7 @@ const UsersList = (props) => {
                     </Link>
                   </div>
 
-                  <div className="modal fade" id="modalDeleteUsers" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal fade" id="modalDeleteUsers" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                       <div className="modal-content">
                         <div className="modal-header">

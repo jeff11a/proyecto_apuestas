@@ -1,17 +1,66 @@
-import React, { Component } from "react";
-import {
-  faUsers,
-  faTrophy,
-  faDice,
-  faChess,
-  faEllipsisV,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
 import Chart from "./Chart";
 import { Link } from "react-router-dom";
+import UserDataService from "../services/UserService";
+import BetDataService from "../services/BetService";
 
-export default class HomeDashboard extends Component {
-  render() {
+
+const HomeDashboard = (props) => { 
+
+    const [contUser, setContUser] = useState(0);
+    const [finished, setFinished] = useState(0);
+    const [active, setActive] = useState(0);
+    const [contBet, setContBet] = useState(0)
+
+    const countUsers = () => {
+      UserDataService.countUser()
+        .then((result) => {
+          console.log(result.data.cont);
+          setContUser(result.data.cont);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const countBetFinished = () => {
+      BetDataService.countFinished()
+        .then((result) => {
+          console.log(result.data.cont);
+          setFinished(result.data.cont);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const countBetActive = () => {
+      BetDataService.countActive()
+        .then((result) => {
+          console.log(result.data.cont);
+          setActive(result.data.cont);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    const countBet = () => {
+      BetDataService.countAll()
+        .then((result) => {
+          console.log(result.data.cont);
+          setContBet(result.data.cont);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    countUsers();
+    countBetFinished();
+    countBetActive();
+    countBet();
+
     return (
       <div className="container-fluid mt-2">
         <div className="d-sm-flex align-items-center justify-content-between mb-4">
@@ -27,11 +76,11 @@ export default class HomeDashboard extends Component {
                       Usuarios
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      1350
+                      { contUser }
                     </div>
                   </div>
                   <div className="col-auto">
-                    <FontAwesomeIcon icon={faUsers} size="2x" />
+                    <i className="fas fa-users fa-2x"></i>
                   </div>
                 </div>
               </div>
@@ -47,11 +96,11 @@ export default class HomeDashboard extends Component {
                       Eventos Activos
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      25
+                      { active }
                     </div>
                   </div>
                   <div className="col-auto">
-                    <FontAwesomeIcon icon={faDice} size="2x" />
+                  <i className="fas fa-dice fa-2x"></i>
                   </div>
                 </div>
               </div>
@@ -67,11 +116,11 @@ export default class HomeDashboard extends Component {
                       Eventos Terminados
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      50
+                      { finished }
                     </div>
                   </div>
                   <div className="col-auto">
-                    <FontAwesomeIcon icon={faChess} size="2x" />
+                  <i className="fas fa-chess fa-2x"></i>
                   </div>
                 </div>
               </div>
@@ -87,11 +136,11 @@ export default class HomeDashboard extends Component {
                       Total Eventos
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      75
+                      { contBet }
                     </div>
                   </div>
                   <div className="col-auto">
-                    <FontAwesomeIcon icon={faTrophy} size="2x" />
+                  <i className="fas fa-trophy fa-2x"></i>
                   </div>
                 </div>
               </div>
@@ -116,8 +165,7 @@ export default class HomeDashboard extends Component {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <FontAwesomeIcon icon={faEllipsisV} />
-                    {/* <i className="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i> */}
+                    <i className="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                   </Link>
                   <div
                     className="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -146,5 +194,7 @@ export default class HomeDashboard extends Component {
         </div>
       </div>
     );
-  }
-}
+
+};
+
+export default HomeDashboard;
