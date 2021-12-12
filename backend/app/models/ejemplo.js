@@ -1,3 +1,5 @@
+/* 
+
 const user = {
     _id: String,  //mongoDB lo crea automaticamente 
     firstName: String, 
@@ -42,4 +44,4 @@ const bet = {
     ],
     ganador: string //ganador del evento
     
-}
+} */

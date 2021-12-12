@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Pagination from "@material-ui/lab/Pagination";
 import UserDataService from "../../services/UserService";
 import { useTable } from "react-table";
 import Sidebar2 from "../Sidebar2";
@@ -13,26 +14,55 @@ const UsersList = (props) => {
   const [searchName, setSearchName] = useState("");
   const usersRef = useRef();
 
-  usersRef.current = users;
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
 
-  useEffect(() => {
-    retrieveUsers();
-  }, []);
+  const pageSizes = [5, 10, 15, 20];
+
+  usersRef.current = users;
 
   const onChangeSearchName = (e) => {
     const searchName = e.target.value;
     setSearchName(searchName);
   };
 
+  const getRequestParams = (searchName, page, pageSize) => {
+    let params = {};
+
+    if (searchName) {
+      params["name"] = searchName;
+    }
+
+    if (page) {
+      params["page"] = page - 1;
+    }
+
+    if (pageSize) {
+      params["size"] = pageSize;
+    }
+
+    return params;
+  };
+
   const retrieveUsers = () => {
-    UserDataService.getAll()
+    const params = getRequestParams(searchName, page, pageSize);
+
+    UserDataService.getAll(params)
       .then((response) => {
-        setUsers(response.data);
+        const { users, totalPages } = response.data;
+
+        setUsers(users);
+        setCount(totalPages);
+
+        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
+
+  useEffect(retrieveUsers, [page, pageSize]);
 
   const refreshList = () => {
     retrieveUsers();
@@ -50,13 +80,8 @@ const UsersList = (props) => {
   };
 
   const findByName = () => {
-    UserDataService.findByName(searchName)
-      .then((response) => {
-        setUsers(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    setPage(1);
+    retrieveUsers();
   };
 
   const openUser = (rowIndex) => {
@@ -83,6 +108,16 @@ const UsersList = (props) => {
 
 
   };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
+
 
   const columns = useMemo(
     () => [
@@ -115,7 +150,7 @@ const UsersList = (props) => {
         accessor: "birthday",
       },
       {
-        Header: "Tipo de Usuario",
+        Header: "Rol",
         accessor: "typeUser",
       },
       {
@@ -191,7 +226,30 @@ const UsersList = (props) => {
                       </div>
                     </div>
                   </div>
+
                   <div className="col-md-12 list">
+                    <div className="mt-3">
+                      {"Items por página: "}
+                      <select className="" onChange={handlePageSizeChange} value={pageSize}>
+                        {pageSizes.map((size) => (
+                          <option key={size} value={size}>
+                            {size}
+                          </option>
+                        ))}
+                      </select>
+
+                      <Pagination
+                        className="my-3"
+                        count={count}
+                        page={page}
+                        siblingCount={1}
+                        boundaryCount={1}
+                        variant="outlined"
+                        shape="rounded"
+                        onChange={handlePageChange}
+                      />
+                    </div>
+
                     <table
                       className="table table-striped table-bordered"
                       {...getTableProps()}

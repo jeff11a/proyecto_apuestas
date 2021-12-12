@@ -1,23 +1,25 @@
 module.exports = mongoose => {
     var schema = mongoose.Schema(
       {
-        player1: String, 
-        player2: String, 
-        torneo: String, 
-        modalidad:  String, 
-        totalP1: Number, 
-        saldoP1: Number, 
-        totalP2: Number, 
-        saldoP2: Number, 
-        saldoTotal: Number, 
-        estado: String, 
-        activo: Boolean, 
-        ganador: String,
+        player1:    { type: String, required: true, minlength: 3, maxlength:50 }, 
+        player2:    { type: String, required: true, minlength: 3, maxlength:50 }, 
+        torneo:     { type: String, required: true, minlength: 3, maxlength:50 }, 
+        modalidad:  { type: String, required: true }, 
+        totalP1:    { type: Number, default: 0 }, 
+        saldoP1:    { type: Number, default: 0 }, 
+        totalP2:    { type: Number, default: 0 }, 
+        saldoP2:    { type: Number, default: 0 }, 
+        saldoTotal: { type: Number, default: 0 }, 
+        estado:     { type: String, required: true }, 
+        activo:     { type: Boolean, default: false }, 
+        ganador:    { type: String, default: ""},
         apostadores: [
             {
                 id: String, 
-                valorAp: String,
-                playerAp: String, 
+                name: String,
+                dineroAp: Number,
+                playerAp: String,
+                fechaAp: Date
             }
         ],
         

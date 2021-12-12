@@ -1,15 +1,22 @@
 const db = require("../models");
 const Bet = db.bets;
 
+//Paginación
+const getPagination = (page, size) => {
+  const limit = size ? +size : 5;
+  const offset = page ? page * limit : 0;
+  return { limit, offset };
+};
+
 // Crear y guardar un nuevo evento
 exports.create = (req, res) => {
-  // Validar solicitud
+  // Validar datos requeridos
   if (!req.body.player1 || !req.body.player2 || !req.body.torneo || !req.body.modalidad || !req.body.estado) {
     res.status(400).send({ message: "¡El contenido no puede estar vacío!" });
     return;
   }
 
-  // Crear un evento
+  // Crea un evento
   const bet = new Bet({
     player1: req.body.player1,
     player2: req.body.player2,
@@ -22,11 +29,11 @@ exports.create = (req, res) => {
     saldoTotal: req.body.saldoTotal,
     estado: req.body.estado,
     apostadores: req.body.apostadores,
-    activo: req.body.activo ? req.body.activo : true,
+    activo: req.body.activo ? req.body.activo : false,
     ganador: req.body.ganador
   });
 
-  // Guardar un evento en la base de datos
+  // Guarda un evento en la base de datos
   bet
     .save(bet)
     .then(data => {
@@ -40,14 +47,30 @@ exports.create = (req, res) => {
     });
 };
 
-// Recupere todos los eventos de la base de datos
+// Recupera todos los eventos de la base de datos
+// Si hay un termino de busqueda devuelve los eventos que coincidan con el termino
 exports.findAll = (req, res) => {
-  const player = req.query.player;
-  var condition = player ? { $or: [{ player1: { $regex: new RegExp(player), $options: "i" } }, { player2: { $regex: new RegExp(player), $options: "i" } }, { torneo: { $regex: new RegExp(player), $options: "i" } }] } : {};
+  const { page, size, player } = req.query
+  var condition = player
+    ? {
+      $or: [{ player1: { $regex: new RegExp(player), $options: "i" } },
+      { player2: { $regex: new RegExp(player), $options: "i" } },
+      { torneo: { $regex: new RegExp(player), $options: "i" } }]
+    }
+    : {};
 
-  Bet.find(condition)
+  const { limit, offset } = getPagination(page, size);
+
+  Bet.paginate(condition, { offset, limit })
     .then(data => {
-      res.send(data);
+      res.send(
+        {
+          totalItems: data.totalDocs,
+          bets: data.docs,
+          totalPages: data.totalPages,
+          currentPage: data.page - 1,
+        }
+      );
     })
     .catch(err => {
       res.status(500).send({
@@ -57,7 +80,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Buscar un solo evento con una id
+// Busca eventos por id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
@@ -74,7 +97,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Actualizar un evento por el id
+// Actualiza los datos de un evento por el id
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
@@ -146,23 +169,39 @@ exports.deleteAll = (req, res) => {
 
 // Encuentra todos los eventos activos
 exports.findAllActive = (req, res) => {
-  Bet.find({ activo: true })
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  Bet.paginate({ activo: true, $or: [{ estado: /Disponible/i }, { estado: /Jugando/i }] }, { offset, limit })
     .then(data => {
-      res.send(data);
+      res.send({
+        totalItems: data.totalDocs,
+        bets: data.docs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+      });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Se produjo un error al recuperar los eventos de apuesta."
+          err.message || "Se produjo un error al recuperar los eventos de apuesta activos."
       });
     });
 };
 
-// Encuentra todos los eventos activos
+// Encuentra todos los eventos finalizados
 exports.findAllFinished = (req, res) => {
-  Bet.find({ estado: "Finalizado" })
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  Bet.paginate({ estado: "Finalizado", activo: true }, { offset, limit })
     .then(data => {
-      res.send(data);
+      res.send({
+        totalItems: data.totalDocs,
+        bets: data.docs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+      });
     })
     .catch(err => {
       res.status(500).send({
@@ -172,45 +211,45 @@ exports.findAllFinished = (req, res) => {
     });
 };
 
-//contar eventos de apuestas finalizados
+//cuenta los eventos de apuestas finalizados
 exports.countFinished = (req, res) => {
-  Bet.countDocuments({ estado: "Finalizado"})
-  .then(count => {
-    res.send({cont: count});
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-       err.message || "No se pudo contar los eventos finalizados"
+  Bet.countDocuments({ estado: "Finalizado" })
+    .then(count => {
+      res.send({ cont: count });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "No se pudo contar los eventos finalizados"
+      });
     });
-  });
 };
 
-//Contar eventos de apuestas disponibles
+//Contar eventos de apuestas disponibles 
 
 exports.countActive = (req, res) => {
-  Bet.countDocuments({ $or: [{estado: /Disponible/i}, {estado: /Jugando/i}] })
-  .then(count => {
-    res.send({cont: count});
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-       err.message || "No se pudo contar los eventos disponibles"
+  Bet.countDocuments({ $or: [{ estado: /Disponible/i }, { estado: /Jugando/i }] })
+    .then(count => {
+      res.send({ cont: count });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "No se pudo contar los eventos disponibles"
+      });
     });
-  });
 };
 
 //contar todos los eventos
 exports.countAll = (req, res) => {
   Bet.countDocuments()
-  .then(count => {
-    res.send({cont: count});
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-       err.message || "No se pudo contar los eventos"
+    .then(count => {
+      res.send({ cont: count });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "No se pudo contar los eventos"
+      });
     });
-  });
 };

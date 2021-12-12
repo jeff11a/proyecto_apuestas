@@ -6,30 +6,34 @@ module.exports = app => {
     // Crear nuevo evento de apuesta
     router.post("/", bets.create);
   
-    // Retrieve all bets
+    // Busca todas los eventos de apuestas
     router.get("/", bets.findAll);
 
+    //Busca todos los eventos de apuesta finalizados
     router.get("/finished", bets.findAllFinished);
 
+    //Cuenta todas las apuestas finalizadas
     router.get("/countFinished", bets.countFinished);
 
+    //Cuenta todos los eventos de apuesta
     router.get("/countAll", bets.countAll);
 
+    //Cuenta todos los eventos de apuetas disponibles y en juego
     router.get("/countActive", bets.countActive);
   
-    // Retrieve all published bets
+    // Busca todos los eventos de apuestas disponibles y en juego
     router.get("/active", bets.findAllActive);
   
-    // Retrieve a single bet with id
+    // Busca eventos de apuestas por id
     router.get("/:id", bets.findOne);
   
-    // Update a bet with id
+    // Actualiza eventos segun la id
     router.put("/:id", bets.update);
   
-    // Delete a bet with id
+    // Elimina eventos segun id
     router.delete("/:id", bets.delete);
   
-    // Create a new bet
+    // Elimina todo los eventos de apuesta
     router.delete("/", bets.deleteAll);
   
     app.use("/api/bets", router);

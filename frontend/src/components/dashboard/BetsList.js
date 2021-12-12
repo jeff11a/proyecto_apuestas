@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Pagination from "@material-ui/lab/Pagination";
 import BetDataService from "../../services/BetService";
 import { useTable } from "react-table";
 import Sidebar2 from "../Sidebar2";
@@ -13,26 +14,55 @@ const BetsList = (props) => {
   const [searchPlayer, setSearchPlayer] = useState("");
   const betsRef = useRef();
 
-  betsRef.current = bets;
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
 
-  useEffect(() => {
-    retrieveBets();
-  }, []);
+  const pageSizes = [5, 10, 15, 20];
+
+  betsRef.current = bets;
 
   const onChangeSearchPlayer = (e) => {
     const searchPlayer = e.target.value;
     setSearchPlayer(searchPlayer);
   };
 
+  const getRequestParams = (searchPlayer, page, pageSize) => {
+    let params = {};
+
+    if (searchPlayer) {
+      params["player"] = searchPlayer;
+    }
+
+    if (page) {
+      params["page"] = page - 1;
+    }
+
+    if (pageSize) {
+      params["size"] = pageSize;
+    }
+
+    return params;
+  };
+
   const retrieveBets = () => {
+    const params = getRequestParams(searchPlayer, page, pageSize);
+
     BetDataService.getAll()
       .then((response) => {
-        setBets(response.data);
+        const { bets, totalPages } = response.data;
+
+        setBets(bets);
+        setCount(totalPages);
+
+        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
+
+  useEffect(retrieveBets, [page, pageSize]);
 
   const refreshList = () => {
     retrieveBets();
@@ -50,13 +80,8 @@ const BetsList = (props) => {
   };
 
   const findByPlayer = () => {
-    BetDataService.findByPlayer(searchPlayer)
-      .then((response) => {
-        setBets(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    setPage(1);
+    retrieveBets();
   };
 
   const openBet = (rowIndex) => {
@@ -82,6 +107,15 @@ const BetsList = (props) => {
       });
 
 
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
   };
 
   const columns = useMemo(
@@ -204,6 +238,28 @@ const BetsList = (props) => {
                     </div>
                   </div>
                   <div className="col-md-12 list">
+                    <div className="mt-3">
+                      {"Items por página: "}
+                      <select onChange={handlePageSizeChange} value={pageSize}>
+                        {pageSizes.map((size) => (
+                          <option key={size} value={size}>
+                            {size}
+                          </option>
+                        ))}
+                      </select>
+
+                      <Pagination
+                        className="my-3"
+                        count={count}
+                        page={page}
+                        siblingCount={1}
+                        boundaryCount={1}
+                        variant="outlined"
+                        shape="rounded"
+                        onChange={handlePageChange}
+                      />
+                    </div>
+
                     <table
                       className="table table-striped table-bordered"
                       {...getTableProps()}

@@ -1,6 +1,6 @@
 const express = require("express");
-// const bodyParser = require("body-parser"); /* deprecated */
 const cors = require("cors");
+const dbConfig = require("./app/config/db.config");
 
 const app = express();
 
@@ -10,35 +10,39 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
-app.use(express.json());  /* bodyParser.json() is deprecated */
+// Analiza peticiones de content-type - application/json
+app.use(express.json());  
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));   /* bodyParser.urlencoded() is deprecated */
+// Analiza peticiones de content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));  
 
 const db = require("./app/models");
+
+
 db.mongoose
-  .connect(db.url, {
+  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log("¡Conectado a la base de datos!");
+    console.log("Conectado con exito a MongoDB.");
+    //initial();
   })
   .catch(err => {
-    console.log("¡No se puede conectar a la base de datos!", err);
+    console.error("Error de conexión", err);
     process.exit();
   });
 
-// simple route
+// Ruta sencilla
 app.get("/", (req, res) => {
   res.json({ message: "¡Bienvenido!" });
 });
 
+//Rutas
 require("./app/routes/user.routes")(app);
 require("./app/routes/bet.routes")(app);
 
-// set port, listen for requests
+// establece el puerto para escuchar peticiones
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`El servidor se está ejecutando en el puerto ${PORT}.`);

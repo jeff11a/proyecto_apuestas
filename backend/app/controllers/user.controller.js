@@ -1,6 +1,12 @@
 const db = require("../models");
 const User = db.users;
 
+const getPagination = (page, size) => {
+  const limit = size ? +size : 3;
+  const offset = page ? page * limit : 0;
+  return { limit, offset };
+};
+
 // Crear y guardar un nuevo usuario
 exports.create = (req, res) => {
   // Validar solicitud
@@ -38,13 +44,29 @@ exports.create = (req, res) => {
     });
 };
 
+
 // Recupere todos los usuarios de la base de datos
 exports.findAll = (req, res) => {
-  const firstName = req.query.name;
-  var condition = firstName ? {$or: [{ firstName: { $regex: new RegExp(firstName), $options: "i" } }, { lastName: { $regex: new RegExp(firstName), $options: "i" }}, { email: { $regex: new RegExp(firstName), $options: "i" }}] } : {};
-  User.find(condition)
+  const { page, size, name } = req.query
+
+  var condition = name 
+            ? {$or: [{ firstName: { $regex: new RegExp(name), $options: "i" } },
+                     { lastName: { $regex: new RegExp(name), $options: "i" }}, 
+                     { email: { $regex: new RegExp(name), $options: "i" }}] } 
+            : {};
+
+  const { limit, offset } = getPagination(page, size);
+  
+  User.paginate(condition, { offset, limit })
     .then(data => {
-      res.send(data);
+      res.send(
+       {
+        totalItems: data.totalDocs,
+        users: data.docs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+       }
+      );
     })
     .catch(err => {
       res.status(500).send({

@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import {
-    faHome,
-    faTachometerAlt,
-    faUsers,
-    faTrophy,
-    faDownload 
-  } from "@fortawesome/free-solid-svg-icons";
+  faHome,
+  faTachometerAlt,
+  faUsers,
+  faTrophy,
+  faDownload
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default class Sidebar2 extends Component {

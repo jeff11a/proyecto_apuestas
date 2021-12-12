@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import UserDataService from "../../services/UserService";
 import Sidebar2 from "../Sidebar2";
 import Navbar2 from "../Navbar2";
+import { Dialog } from "@material-ui/core";
 
 const User = (props) => {
   const { id } = useParams();
@@ -100,9 +101,9 @@ const User = (props) => {
             <div className="col-3">
             </div>
             <div className="col">
-              <div class="card mb-4">
-                <div class="card-body">
-                  <h5 class="card-title">Editar Usuario</h5>
+              <div className="card mb-4">
+                <div className="card-body">
+                  <h5 className="card-title">Editar Usuario</h5>
 
 
 
