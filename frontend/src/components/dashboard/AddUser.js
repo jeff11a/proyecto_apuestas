@@ -13,7 +13,7 @@ const AddUser = () => {
     country: "",
     phoneNumber: "",
     birthday: "",
-    typeUser: "C",
+    typeUser: "",
     balance: 0,
     bets: [],
     active: true
