@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import UserDataService from "../../services/UserService";
 import Sidebar2 from "../Sidebar2";
 import Navbar2 from "../Navbar2";
+import moment from 'moment';
 import { Dialog } from "@material-ui/core";
 
 const User = (props) => {
@@ -198,7 +199,7 @@ const User = (props) => {
                               className="form-control"
                               id="birthday"
                               required
-                              value={currentUser.birthday}
+                              value={moment(currentUser.birthday).add(1,'h').format('YYYY-MM-DD')}
                               onChange={handleInputChange}
                               name="birthday"
                             />
@@ -207,9 +208,9 @@ const User = (props) => {
                           <div className="form-group">
                             <label htmlFor="typeUser">Tipo de usuario</label>
                             <select className="form-select" name="typeUser" id="typeUser" onChange={handleInputChange} value={currentUser.typeUser}>
-                              <option value="C">Cliente</option>
-                              <option value="I">Interno</option>
-                              <option value="A">Administrador</option>
+                              <option value="Cliente">Cliente</option>
+                              <option value="Interno">Interno</option>
+                              <option value="Admin">Administrador</option>
                             </select>
                           </div>
 

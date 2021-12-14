@@ -2,8 +2,29 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import BetDataService from "../../services/BetService";
 
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 
 const AddBet = () => {
+
+  const validationSchema = Yup.object().shape({
+    player1: Yup.string()
+      .required('Nombre del Jugador/Equipo requerido')
+      .min(3, 'El nombre del Jugador/Equipo debe tener al menos 3 caracteres')
+      .max(30, 'El nombre del Jugador/Equipo no debe superar los 30 caracteres'),
+    player2: Yup.string()
+      .required('Nombre del Jugador/Equipo requerido')
+      .min(3, 'El nombre del Jugador/Equipo al menos 3 caracteres')
+      .max(30, 'El nombre del Jugador/Equipo no debe superar los 30 caracteres'),
+    torneo: Yup.string()
+      .required('Torneo requerido')
+      .min(3, 'El torneo debe tener al menos 6 caracteres')
+      .max(40, 'El torneo no debe superar los 40 caracteres'),
+    modalidad: Yup.string(),
+    estado: Yup.string()
+  });
 
   const initialBetState = {
     id: null,
@@ -78,8 +99,17 @@ const AddBet = () => {
     setSubmitted(false);
   };
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  });
+
   return (
-    <div className="submit-form">
+    <div>
       {submitted ? (
         <div>
           <h4>Solicitud Exitosa!</h4>
@@ -96,72 +126,83 @@ const AddBet = () => {
         <div className="card mb-3">
           <div className="card-body">
             <h5 className="card-title">Agregar Evento de Apuesta</h5>
-            <div>
-              <div className="form-group">
-                <label htmlFor="player1">Jugador/Equipo 1</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="player1"
-                  required
-                  value={bet.player1}
-                  onChange={handleInputChange}
-                  name="player1"
-                />
-              </div>
+            <div className="register-form">
+              <form onSubmit={handleSubmit(saveBet)}>
 
-              <div className="form-group">
-                <label htmlFor="player2">Jugador/Equipo 2</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="player2"
-                  required
-                  value={bet.player2}
-                  onChange={handleInputChange}
-                  name="player2"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Jugador/Equipo 1 <span style={{ color: 'red' }}>*</span></label>
+                  <input
+                    name="player1"
+                    type="text"
+                    {...register('player1')}
+                    className={`form-control ${errors.player1 ? 'is-invalid' : ''}`}
+                    value={bet.player1}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.player1?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="torneo">Torneo</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="torneo"
-                  required
-                  value={bet.torneo}
-                  onChange={handleInputChange}
-                  name="torneo"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Jugador/Equipo 2 <span style={{ color: 'red' }}>*</span></label>
+                  <input
+                    name="player2"
+                    type="text"
+                    {...register('player2')}
+                    className={`form-control ${errors.player2 ? 'is-invalid' : ''}`}
+                    value={bet.player2}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.player2?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="modalidad">Modalidad</label>
-                <select className="form-select" name="modalidad" id="modalidad" onChange={handleInputChange} value={bet.modalidad}>
-                  <option value="clasico">Clasico</option>
-                  <option value="rapido">Rápido</option>
-                  <option value="relampago">Relámpago</option>
-                  <option value="bullet">Bullet</option>
-                  <option value="online">En línea</option>
-                </select>
-              </div>
+                <div className="form-group">
+                  <label>Torneo <span style={{ color: 'red' }}>*</span></label>
+                  <input
+                    name="torneo"
+                    type="text"
+                    {...register('torneo')}
+                    className={`form-control ${errors.torneo ? 'is-invalid' : ''}`}
+                    value={bet.torneo}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.torneo?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="typeBet">Estado</label>
-                <select className="form-select" name="estado" id="estado" onChange={handleInputChange} value={bet.estado}>
-                  <option value="Disponible">Disponible</option>
-                  <option value="Finalizado">Finalizado</option>
-                  <option value="Jugando">Jugando</option>
-                  <option value="Cancelado">Cancelado</option>
-                </select>
-              </div>
-              <Link to="/dashboard/bets" className="btn btn-secondary me-2">
-                Atras
-              </Link>
-              <button onClick={saveBet} className="btn btn-success ms-2">
-                Crear Evento
-              </button>
+                <div className="form-group">
+                  <label htmlFor="modalidad">Modalidad <span style={{ color: 'red' }}>*</span></label>
+                  <select className="form-select" name="modalidad" id="modalidad" {...register('modalidad')} onChange={handleInputChange} value={bet.modalidad}>
+                    <option value="clasico">Clasico</option>
+                    <option value="rapido">Rápido</option>
+                    <option value="relampago">Relámpago</option>
+                    <option value="bullet">Bullet</option>
+                    <option value="online">En línea</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="typeBet">Estado <span style={{ color: 'red' }}>*</span></label>
+                  <select className="form-select" name="estado" id="estado" {...register('estado')} onChange={handleInputChange} value={bet.estado}>
+                    <option value="Disponible">Disponible</option>
+                    <option value="Finalizado">Finalizado</option>
+                    <option value="Jugando">Jugando</option>
+                    <option value="Cancelado">Cancelado</option>
+                  </select>
+                </div>
+                <Link to="/dashboard/bets" className="btn btn-secondary me-2">
+                  Atras
+                </Link>
+                <button type="submit" className="btn btn-success ms-2">
+                  Crear Evento
+                </button>
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="btn btn-warning float-right"
+                  style={{ display: 'none' }}
+                >
+                  Reset
+                </button>
+              </form>
             </div>
           </div>
         </div>

@@ -2,8 +2,44 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import UserDataService from "../../services/UserService";
 
+import { useForm } from 'react-hook-form';
+import moment from 'moment';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 
 const AddUser = () => {
+
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .required('Nombre requerido')
+      .min(3, 'El nombre debe tener al menos 3 caracteres')
+      .max(30, 'El nombre no debe superar los 30 caracteres'),
+    lastName: Yup.string()
+      .required('Apellido requerido')
+      .min(3, 'El apellido debe tener al menos 3 caracteres')
+      .max(30, 'El apellido no debe superar los 30 caracteres'),
+    email: Yup.string()
+      .required('Correo requerido')
+      .email('Correo invalido'),
+    password: Yup.string()
+      .required('Constraseña requerida')
+      .min(6, 'La contraseña debe tener al menos 6 caracteres')
+      .max(40, 'La contraseña no debe superar los 40 caracteres'),
+    country: Yup.string()
+      .required('País requerido')
+      .max(20, 'País no debe superar los 20 caracteres'),
+    phoneNumber: Yup.number()
+      .required('Teléfono requerido')
+      .positive('El teléfono es un número positivo')
+      .min(1000000, 'El teléfono debe tener al menos 7 caracteres')
+      .max(999999999999999, 'El teléfono no debe superar los 15 caracteres'),
+    birthday: Yup.date()
+      .required('Fecha es requerida')
+      .max(moment(new Date()).subtract(18, 'y').format('YYYY-MM-DD'), 'Debe ser mayor de edad para registrarse'),
+    typeUser: Yup.string()
+  });
+
   const initialUserState = {
     id: null,
     firstName: "",
@@ -13,7 +49,7 @@ const AddUser = () => {
     country: "",
     phoneNumber: "",
     birthday: "",
-    typeUser: "",
+    typeUser: "Cliente",
     balance: 0,
     bets: [],
     active: true
@@ -40,6 +76,8 @@ const AddUser = () => {
       bets: user.bets,
       active: user.active
     };
+
+    console.log(data);
 
     UserDataService.create(data)
       .then(response => {
@@ -69,8 +107,20 @@ const AddUser = () => {
     setSubmitted(false);
   };
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(validationSchema)
+  });
+
+
+
   return (
-    <div className="submit-form">
+
+    <div>
       {submitted ? (
         <div>
 
@@ -88,122 +138,138 @@ const AddUser = () => {
         </div>
 
       ) : (
+
         <div className="card mb-4">
           <div className="card-body">
             <h5 className="card-title">Agregar Usuario</h5>
-            <div>
+            <div className="register-form">
+              <form onSubmit={handleSubmit(saveUser)}>
 
-              <div className="form-group">
-                <label htmlFor="firstName">Nombres</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="firstName"
-                  required
-                  value={user.firstName}
-                  onChange={handleInputChange}
-                  name="firstName"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Nombre <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="firstName"
+                    type="text"
+                    {...register('firstName')}
+                    className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                    value={user.firstName}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.firstName?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="lastName">Apellidos</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="lastName"
-                  required
-                  value={user.lastName}
-                  onChange={handleInputChange}
-                  name="lastName"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Apellido <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="lastName"
+                    type="text"
+                    {...register('lastName')}
+                    className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                    value={user.lastName}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.lastName?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Correo</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  required
-                  value={user.email}
-                  onChange={handleInputChange}
-                  name="email"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Correo <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="email"
+                    type="email"
+                    {...register('email')}
+                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                    value={user.email}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.email?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="password">Contraseña</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  required
-                  value={user.password}
-                  onChange={handleInputChange}
-                  name="password"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Contraseña <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="password"
+                    type="password"
+                    {...register('password')}
+                    className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                    value={user.password}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.password?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="country">País</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="country"
-                  required
-                  value={user.country}
-                  onChange={handleInputChange}
-                  name="country"
-                />
-              </div>
+                <div className="form-group">
+                  <label>País <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="country"
+                    type="text"
+                    {...register('country')}
+                    className={`form-control ${errors.country ? 'is-invalid' : ''}`}
+                    value={user.country}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.country?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="phoneNumber">Teléfono</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="phoneNumber"
-                  required
-                  value={user.phoneNumber}
-                  onChange={handleInputChange}
-                  name="phoneNumber"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Teléfono <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="phoneNumber"
+                    type="number"
+                    {...register('phoneNumber')}
+                    className={`form-control ${errors.phoneNumber ? 'is-invalid' : ''}`}
+                    value={user.phoneNumber}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.phoneNumber?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="birthday">Fecha de Nacimiento:</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  id="birthday"
-                  required
-                  value={user.birthday}
-                  onChange={handleInputChange}
-                  name="birthday"
-                />
-              </div>
+                <div className="form-group">
+                  <label>Fecha de Nacimiento <span style={{color: 'red'}}>*</span></label>
+                  <input
+                    name="birthday"
+                    type="date"
+                    {...register('birthday')}
+                    className={`form-control ${errors.birthday ? 'is-invalid' : ''}`}
+                    value={user.birthday}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.birthday?.message}</div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="typeUser">Tipo de usuario</label>
-                <select className="form-select" name="typeUser" id="typeUser" onChange={handleInputChange} value={user.typeUser}>
-                  <option value="C">Cliente</option>
-                  <option value="I">Interno</option>
-                  <option value="A">Administrador</option>
-                </select>
-              </div>
-              <Link to="/dashboard/users" className="btn btn-secondary me-2">
-                Atras
-              </Link>
-              <button onClick={saveUser} className="btn btn-success ms-2">
-                Crear Usuario
-              </button>
+                <div className="form-group">
+                  <label htmlFor="typeUser">Rol <span style={{color: 'red'}}>*</span></label>
+                  <select className="form-select" name="typeUser" id="typeUser" {...register('typeUser')} onChange={handleInputChange} value={user.typeUser}>
+                    <option value="Cliente">Cliente</option>
+                    <option value="Interno">Interno</option>
+                    <option value="Admin">Administrador</option>
+                  </select>
+                </div>
+
+
+                <div className="form-group">
+                  <Link to="/dashboard/users" className="btn btn-secondary me-2">
+                    Atras
+                  </Link>
+                  <button type="submit" className="btn btn-success">
+                    Crear Usuario
+                  </button>
+                  <button
+                    type="button"
+                    onClick={reset}
+                    className="btn btn-warning float-right"
+                    style={{ display: 'none' }}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       )}
     </div>
   );
+
 };
 
 export default AddUser;
