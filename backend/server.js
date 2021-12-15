@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));  
 
 const db = require("./app/models");
-//const Role = db.role;
+const Role = db.role;
 
 db.mongoose
   .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
@@ -26,7 +26,7 @@ db.mongoose
   })
   .then(() => {
     console.log("Conectado con exito a MongoDB.");
-    //initial();
+    initial();
   })
   .catch(err => {
     console.error("Error de conexión", err);
@@ -41,6 +41,8 @@ app.get("/", (req, res) => {
 //Rutas
 require("./app/routes/user.routes")(app);
 require("./app/routes/bet.routes")(app);
+require("./app/routes/auth.routes")(app);
+require("./app/routes/users.routes")(app);
 
 // establece el puerto para escuchar peticiones
 const PORT = process.env.PORT || 8080;
@@ -48,7 +50,7 @@ app.listen(PORT, () => {
   console.log(`El servidor se está ejecutando en el puerto ${PORT}.`);
 });
 
-/* function initial() {
+function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
@@ -83,4 +85,3 @@ app.listen(PORT, () => {
     }
   });
 }
- */

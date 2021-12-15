@@ -61,6 +61,23 @@ exports.create = (req, res) => {
           res.send({ message: "¡Usuario registrado correctamente!" });
         });
       });
+    }else {
+      Role.findOne({ name: "Cliente" }, (err, role) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        user.roles = role._id;
+        user.save(err => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          res.send({ message: "¡Usuario registrado correctamente!-" });
+        });
+      });
     }
   });
 };
@@ -275,3 +292,24 @@ exports.countUserClient = (req, res) => {
       });
     });
 };
+
+
+exports.allAccess = (req, res) => {
+  res.status(200).send("Public Content.");
+};
+
+exports.userBoard = (req, res) => {
+  res.status(200).send("User Content.");
+};
+
+exports.clienteBoard = (req, res) => {
+  res.status(200).send("Cliente Content.");
+};
+
+exports.adminBoard = (req, res) => {
+  res.status(200).send("Admin Content.");
+};
+
+exports.internoBoard = (req, res) => {
+  res.status(200).send("Interno Content.");
+}; 
