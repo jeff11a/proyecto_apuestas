@@ -15,7 +15,7 @@ const HomeDashboard = (props) => {
   const countUsers = () => {
     UserDataService.countUser()
       .then((result) => {
-        console.log(result.data.cont);
+        //console.log(result.data.cont);
         setContUser(result.data.cont);
       })
       .catch((e) => {
@@ -26,7 +26,7 @@ const HomeDashboard = (props) => {
   const countBetFinished = () => {
     BetDataService.countFinished()
       .then((result) => {
-        console.log(result.data.cont);
+        //console.log(result.data.cont);
         setFinished(result.data.cont);
       })
       .catch((e) => {
@@ -37,7 +37,7 @@ const HomeDashboard = (props) => {
   const countBetActive = () => {
     BetDataService.countActive()
       .then((result) => {
-        console.log(result.data.cont);
+        //console.log(result.data.cont);
         setActive(result.data.cont);
       })
       .catch((e) => {
@@ -48,7 +48,7 @@ const HomeDashboard = (props) => {
   const countBet = () => {
     BetDataService.countAll()
       .then((result) => {
-        console.log(result.data.cont);
+        //console.log(result.data.cont);
         setContBet(result.data.cont);
       })
       .catch((e) => {

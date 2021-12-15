@@ -16,7 +16,7 @@ import DashboardAddBet from "./routes/DashboardAddBet";
 import User from "./components/dashboard/Users";
 import Bets from "./components/dashboard/Bets";
 import BetsList from "./components/dashboard/BetsList";
-import Reports from "./components/dashboard/Reports";
+import DashboardReports from "./routes/DashboardReports";
 import NoPage from "./routes/NoPage";
 //CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -50,7 +50,7 @@ render(
       <Route path="/dashboard/bets" element={<BetsList />} />
       <Route path="/dashboard/bets/:id" element={<Bets />} />
       <Route path="/dashboard/addBet" element={<DashboardAddBet />} />
-      <Route path="/dashboard/reports" element={<Reports />} />
+      <Route path="/dashboard/reports" element={<DashboardReports />} />
       <Route path="*" element={<NoPage/>}/>
     </Routes>
   </BrowserRouter>,

@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));  
 
 const db = require("./app/models");
-
+//const Role = db.role;
 
 db.mongoose
   .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
@@ -47,3 +47,40 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`El servidor se está ejecutando en el puerto ${PORT}.`);
 });
+
+/* function initial() {
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "Cliente"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'Cliente' to roles collection");
+      });
+
+      new Role({
+        name: "Interno"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'Interno' to roles collection");
+      });
+
+      new Role({
+        name: "Admin"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added 'Admin' to roles collection");
+      });
+    }
+  });
+}
+ */

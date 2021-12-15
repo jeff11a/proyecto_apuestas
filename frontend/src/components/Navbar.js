@@ -43,22 +43,22 @@ const Bar2 = () => {
   changeActiveNavbar();
 
   return (
-    <div className="container  bg_white2">
+    <div className="container  bg_white2" style={{ backgroundColor: '#e0e0e0' }}>
       <ul className="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 ">
         <li className={liTagEventos}>
-          <Link to="/" className={aTagEventos}>
+          <Link to="/" className={aTagEventos} style={{ backgroundColor: '#fefefe' }}>
             <FaChessKing className="bi mb-1 fs-4" />
             Eventos disponibles
           </Link>
         </li>
         <li className={liTagFinalizados}>
-          <Link to="/finalizados" className={aTagFinalizados}>
+          <Link to="/finalizados" className={aTagFinalizados} style={{ backgroundColor: '#fefefe' }}>
             <FaChessKnight className="bi mb-1 fs-4" />
             Eventos finalizados
           </Link>
         </li>
         <li className={liTag}>
-          <Link to="/dashboard" className={aTag}>
+          <Link to="/dashboard" className={aTag} style={{ backgroundColor: '#fefefe' }}>
             <BsSpeedometer className="bi mb-1 fs-4" />
             Dashboard
           </Link>
@@ -73,12 +73,12 @@ const Navbar = () => {
     <header className="p-0 row">
       <div className="col-md-12 p-2 bg_darkHeavyMetal text-white px-5">
         <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start ">
-          <a
-            href="/"
+          <Link
+            to="/"
             className="d-flex align-items-center mb-2 mb-lg-0 text_gold text-decoration-none me-lg-auto fs-4 fw-bolder"
           >
             <FaTrophy /> BetPlay
-          </a>
+          </Link>
 
           <div>
             <Link

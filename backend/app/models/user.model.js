@@ -1,20 +1,59 @@
 module.exports = (mongoose, mongoosePaginate) => {
   var schema = mongoose.Schema(
     {
-      firstName: String,
-      lastName: String,
-      email: String, 
-      password: String,
-      country: String,
-      phoneNumber: Number,
-      birthday: Date,
-      typeUser: String,
-      active: Boolean,
-      balance: Number,
+      firstName: {
+        type: String, 
+        required: [true, 'Nombre es requerido']
+      },
+      lastName: {
+        type: String, 
+        required: [true, 'Apellido es requerido']
+      },
+      email: {
+        type: String, 
+        unique: true,
+        required: [true, 'Correo es requerido'],
+      }, 
+      password: {
+        type: String, 
+        required: [true, 'Contraseña es requerida'],
+      },
+      salt:{
+        type: String,
+        required: false
+      },
+      country: {
+        type: String, 
+        required: [true, 'País es requerido']
+      },
+      phoneNumber: {
+        type: Number, 
+        required: [true, 'Teléfono es requerido']
+      },
+      birthday: {
+        type: Date, 
+        required: [true, 'Fecha de nacimiento es requerida']
+      },
+      roles: 
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Role"
+        }
+      ,
+      active: {
+        type: Boolean, 
+        required: false,
+        default: true
+      },
+      balance: {
+        type: Number, 
+        required: false,
+        default: 0
+      },
       bets: [
         {
-          id: String,
-          status: String,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Bet",
           value: Number,
           player: String
         }

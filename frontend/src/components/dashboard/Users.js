@@ -4,7 +4,7 @@ import UserDataService from "../../services/UserService";
 import Sidebar2 from "../Sidebar2";
 import Navbar2 from "../Navbar2";
 import moment from 'moment';
-import { Dialog } from "@material-ui/core";
+//import { Dialog } from "@material-ui/core";
 
 const User = (props) => {
   const { id } = useParams();
@@ -19,7 +19,7 @@ const User = (props) => {
     country: "",
     phoneNumber: "",
     birthday: "",
-    typeUser: "C",
+    roles: "",
     active: true
   };
   const [currentUser, setCurrentUser] = useState(initialUserState);
@@ -53,6 +53,7 @@ const User = (props) => {
       email: currentUser.email,
       password: currentUser.password,
       country: currentUser.country,
+      roles: currentUser.roles,
       phoneNumber: currentUser.phoneNumber,
       birthday: currentUser.birthday,
       active: status
@@ -154,7 +155,7 @@ const User = (props) => {
                           </div>
 
                           <div className="form-group">
-                            <label htmlFor="password">Contraseña</label>
+                            <label htmlFor="password" style={{ display: 'none' }}>Contraseña</label>
                             <input
                               type="password"
                               className="form-control"
@@ -163,6 +164,7 @@ const User = (props) => {
                               value={currentUser.password}
                               onChange={handleInputChange}
                               name="password"
+                              style={{ display: 'none' }}
                             />
                           </div>
 
@@ -199,15 +201,15 @@ const User = (props) => {
                               className="form-control"
                               id="birthday"
                               required
-                              value={moment(currentUser.birthday).add(1,'h').format('YYYY-MM-DD')}
+                              value={moment(currentUser.birthday).format('YYYY-MM-DD')}
                               onChange={handleInputChange}
                               name="birthday"
                             />
                           </div>
 
                           <div className="form-group">
-                            <label htmlFor="typeUser">Tipo de usuario</label>
-                            <select className="form-select" name="typeUser" id="typeUser" onChange={handleInputChange} value={currentUser.typeUser}>
+                            <label htmlFor="roles" style={{ display: 'none' }}>Tipo de usuario</label>
+                            <select className="form-select" name="roles" id="roles" onChange={handleInputChange} value={currentUser.roles} >
                               <option value="Cliente">Cliente</option>
                               <option value="Interno">Interno</option>
                               <option value="Admin">Administrador</option>

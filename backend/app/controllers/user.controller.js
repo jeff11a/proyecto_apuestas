@@ -1,5 +1,8 @@
 const db = require("../models");
 const User = db.users;
+const Role = db.role;
+
+var bcrypt = require("bcryptjs");
 
 const getPagination = (page, size) => {
   const limit = size ? +size : 3;
@@ -10,38 +13,56 @@ const getPagination = (page, size) => {
 // Crear y guardar un nuevo usuario
 exports.create = (req, res) => {
   // Validar solicitud
-  if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.password || !req.body.birthday || !req.body.typeUser) {
+  if (!req.body.firstName || !req.body.lastName || !req.body.email || !req.body.country || !req.body.phoneNumber || !req.body.password || !req.body.birthday || !req.body.roles) {
     res.status(400).send({ message: "¡El contenido no puede estar vacío!" });
     return;
   }
+
+  //Generar salt
+  const salt = bcrypt.genSaltSync();
 
   // Crear un usuario
   const user = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    password: req.body.password,
+    password: bcrypt.hashSync(req.body.password, salt),
+    salt: salt,
     country: req.body.country,
     phoneNumber: req.body.phoneNumber,
     birthday: req.body.birthday,
-    typeUser: req.body.typeUser,
-    balance: req.body.balance,
-    bets: req.body.bets,
+    bets: req.body.bets ? req.body.bets : [],
+    balance: req.body.balance ? req.body.balance : 0,
     active: req.body.active ? req.body.active : true
   });
 
   // Guardar usuario en la base de datos
-  user
-    .save(user)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Ocurrió algún error al crear el usuario"
+  user.save((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    if (req.body.roles) {
+
+      Role.findOne({ name: req.body.roles }, (err, role) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        user.roles = role._id;
+        user.save(err => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          res.send({ message: "¡Usuario registrado correctamente!" });
+        });
       });
-    });
+    }
+  });
 };
 
 
@@ -49,23 +70,25 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const { page, size, name } = req.query
 
-  var condition = name 
-            ? {$or: [{ firstName: { $regex: new RegExp(name), $options: "i" } },
-                     { lastName: { $regex: new RegExp(name), $options: "i" }}, 
-                     { email: { $regex: new RegExp(name), $options: "i" }}] } 
-            : {};
+  var condition = name
+    ? {
+      $or: [{ firstName: { $regex: new RegExp(name), $options: "i" } },
+      { lastName: { $regex: new RegExp(name), $options: "i" } },
+      { email: { $regex: new RegExp(name), $options: "i" } }]
+    }
+    : {};
 
   const { limit, offset } = getPagination(page, size);
-  
+
   User.paginate(condition, { offset, limit })
     .then(data => {
       res.send(
-       {
-        totalItems: data.totalDocs,
-        users: data.docs,
-        totalPages: data.totalPages,
-        currentPage: data.page - 1,
-       }
+        {
+          totalItems: data.totalDocs,
+          users: data.docs,
+          totalPages: data.totalPages,
+          currentPage: data.page - 1,
+        }
       );
     })
     .catch(err => {
@@ -80,17 +103,39 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  User.findById(id)
-    .then(data => {
-      if (!data)
-        res.status(404).send({ message: "Usuario no encontrado con id: " + id });
-      else res.send(data);
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({ message: "Error al recuperar el usuario con id =" + id });
-    });
+  User.findOne({ _id: id }, (err, user) => {
+    if (err) {
+      res.status(500).send({ message: "Error al recuperar el usuario con id =" + id });
+      return;
+    }
+    if (!user) {
+      res.status(404).send({ message: "Usuario no encontrado con id: " + id });
+      return;
+    } else {
+      Role.findOne({ _id: user.roles }, (err, role) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+        user.roles = role.name;
+        const usuario = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          country: user.country,
+          phoneNumber: user.phoneNumber,
+          birthday: user.birthday,
+          bets: user.bets,
+          roles: role.name,
+          balance: user.balance,
+          active: user.active
+        }
+        //console.log(usuario);
+        res.send(usuario);
+      });
+    }
+  });
 };
 
 // Actualizar un usuario por el id
@@ -101,21 +146,42 @@ exports.update = (req, res) => {
     });
   }
 
-  const id = req.params.id;
+  Role.findOne({ name: req.body.roles }, (err, role) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    const usuario = {
+      id: req.body.id,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      country: req.body.country,
+      phoneNumber: req.body.phoneNumber,
+      birthday: req.body.birthday,
+      bets: req.body.bets,
+      roles: role._id,
+      balance: req.body.balance,
+      active: req.body.active
+    }
+    const id = req.params.id;
+    console.log(usuario);
 
-  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .then(data => {
-      if (!data) {
-        res.status(404).send({
-          message: `No se puede actualizar el usuario con id = ${id}. ¡Quizás no se encontró el usuario!`
+    User.findByIdAndUpdate(id, usuario, { useFindAndModify: false })
+      .then(data => {
+        if (!data) {
+          res.status(404).send({
+            message: `No se puede actualizar el usuario con id = ${id}. ¡Quizás no se encontró el usuario!`
+          });
+        } else res.send({ message: "El usuario se actualizó correctamente." });
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error al actualizar el usuario con id =" + id
         });
-      } else res.send({ message: "El usuario se actualizó correctamente." });
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error al actualizar el usuario con id =" + id
       });
-    });
+  });
+
 };
 
 // Eliminar un usuario con la id especificada en la solicitud
@@ -145,11 +211,11 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   User.deleteMany({})
     .then(data => {
-      if(data.deletedCount == 1){
+      if (data.deletedCount == 1) {
         res.send({
           message: `¡El usuario se eliminaron con éxito!`
         });
-      }else{
+      } else {
         res.send({
           message: `¡Los ${data.deletedCount} usuarios se eliminaron con éxito!`
         });
@@ -185,27 +251,27 @@ exports.findAllActive = (req, res) => {
 */
 exports.countUser = (req, res) => {
   User.countDocuments()
-  .then(count => {
-    res.send({cont: count});
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-       err.message || "No se pudo contar los usuarios"
+    .then(count => {
+      res.send({ cont: count });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "No se pudo contar los usuarios"
+      });
     });
-  });
 }
 
 //Contador de usuarios cliente
 exports.countUserClient = (req, res) => {
-  const nUser = User.countDocuments({ typeUser: "C"})
-  .then(count => {
-    res.send({cont: count});
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-       err.message || "No se pudo contar los usuarios clientes"
+  const nUser = User.countDocuments({ typeUser: "C" })
+    .then(count => {
+      res.send({ cont: count });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "No se pudo contar los usuarios clientes"
+      });
     });
-  });
 };

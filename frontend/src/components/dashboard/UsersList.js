@@ -134,10 +134,6 @@ const UsersList = (props) => {
         accessor: "email",
       },
       {
-        Header: "Contraseña",
-        accessor: "password",
-      },
-      {
         Header: "País",
         accessor: "country",
       },

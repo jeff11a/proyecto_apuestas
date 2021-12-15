@@ -37,7 +37,7 @@ const AddUser = () => {
     birthday: Yup.date()
       .required('Fecha es requerida')
       .max(moment(new Date()).subtract(18, 'y').format('YYYY-MM-DD'), 'Debe ser mayor de edad para registrarse'),
-    typeUser: Yup.string()
+    roles: Yup.string()
   });
 
   const initialUserState = {
@@ -49,7 +49,7 @@ const AddUser = () => {
     country: "",
     phoneNumber: "",
     birthday: "",
-    typeUser: "Cliente",
+    roles: "Cliente",
     balance: 0,
     bets: [],
     active: true
@@ -71,13 +71,13 @@ const AddUser = () => {
       country: user.country,
       phoneNumber: user.phoneNumber,
       birthday: user.birthday,
-      typeUser: user.typeUser,
+      roles: user.roles,
       balance: user.balance,
       bets: user.bets,
       active: user.active
     };
 
-    console.log(data);
+    //console.log(data);
 
     UserDataService.create(data)
       .then(response => {
@@ -91,11 +91,12 @@ const AddUser = () => {
           phoneNumber: response.data.phoneNumber,
           birthday: response.data.birthday,
           balance: response.data.balance,
+          roles: response.data.roles,
           bets: response.data.bets,
           active: response.data.active
         });
         setSubmitted(true);
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -237,8 +238,8 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="typeUser">Rol <span style={{color: 'red'}}>*</span></label>
-                  <select className="form-select" name="typeUser" id="typeUser" {...register('typeUser')} onChange={handleInputChange} value={user.typeUser}>
+                  <label htmlFor="roles">Rol <span style={{color: 'red'}}>*</span></label>
+                  <select className="form-select" name="roles" id="roles" {...register('roles')} onChange={handleInputChange} value={user.roles}>
                     <option value="Cliente">Cliente</option>
                     <option value="Interno">Interno</option>
                     <option value="Admin">Administrador</option>

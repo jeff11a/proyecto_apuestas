@@ -1,3 +1,8 @@
+#root{
+  background-color: #e0e0e0;
+  min-height: 100vh;;
+}
+
 /*Text color*/
 .text_gold {
   color: #ffdf00;
