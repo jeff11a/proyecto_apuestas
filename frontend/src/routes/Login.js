@@ -1,8 +1,40 @@
 import { FaUserAlt, FaLockOpen, FaUserCheck } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import services from "../services/dataHandler";
 
 const Login = (props) => {
+  //you save your login in your local storage
+  //localStorage.setItem("token", token)
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const loginUrl = "http://localhost:3002/api/user/login";
+
+  const onChangeUser = (event) => {
+    event.preventDefault();
+    setUser(event.target.value);
+    console.log(user);
+  };
+
+  const onChangePassword = (event) => {
+    event.preventDefault();
+    setPassword(event.target.value);
+    console.log(password);
+  };
+
+  const onClick = (event) => {
+    event.preventDefault();
+    const newUser = {
+      userName: user,
+      password: password,
+    };
+    console.log(JSON.stringify(newUser));
+    services.create(loginUrl, newUser).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <>
       <Navbar />
@@ -33,6 +65,8 @@ const Login = (props) => {
                 required=""
                 name="username"
                 placeholder="Correo"
+                onChange={onChangeUser}
+                onBlur={onChangeUser}
               />
             </div>
             <div className="form-group required d-flex flex-row align-items-center">
@@ -48,6 +82,8 @@ const Login = (props) => {
                 id="password"
                 name="password"
                 placeholder="Contraseña"
+                onChange={onChangePassword}
+                onBlur={onChangePassword}
               />
             </div>
 
@@ -59,9 +95,12 @@ const Login = (props) => {
               <br />
             </div>
             <div className="d-flex justify-content-center">
-              <Link className="btn btn1 bg_greenPistachio " to="/saldo">
+              {/* <Link className="btn btn1 bg_greenPistachio " to="/saldo">
                 Login
-              </Link>
+              </Link> */}
+              <button className="btn btn1 bg_greenPistachio " onClick={onClick}>
+                Login
+              </button>
             </div>
           </form>
         </div>
