@@ -35,7 +35,7 @@
     {
       "id": 4,
       "nombre": "Jhon",
-      "saldo": 1320999.999999999,
+      "saldo": 1345666.6666666658,
       "victorias": 0,
       "banco": 2060000,
       "tipo_usuario": "c"
@@ -347,6 +347,16 @@
       "ganador": "Hikaru Nakamura",
       "fecha": "2021-12-07T19:47:08.796Z",
       "ganancia": 55500,
+      "perdida": 20000
+    },
+    {
+      "id": 28,
+      "idUser": 4,
+      "victoria": true,
+      "apuesta": "José Raúl Capablanca",
+      "ganador": "José Raúl Capablanca",
+      "fecha": "2021-12-15T21:35:50.000Z",
+      "ganancia": 24666.666666666664,
       "perdida": 20000
     }
   ]
