@@ -48,7 +48,7 @@ const BetsList = (props) => {
   const retrieveBets = () => {
     const params = getRequestParams(searchPlayer, page, pageSize);
 
-    BetDataService.getAll()
+    BetDataService.getAll(params)
       .then((response) => {
         const { bets, totalPages } = response.data;
 

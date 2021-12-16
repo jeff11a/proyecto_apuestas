@@ -70,10 +70,10 @@ const Login = (props) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-  
-          
-            login.loading = false;
-            login.message = resMessage
+
+
+          login.loading = false;
+          login.message = resMessage
         }
       );
 
@@ -91,11 +91,15 @@ const Login = (props) => {
   });
 
   return (
-    <>
-      <Navbar />
 
-      <div className="container h_100vh" style={{ backgroundColor: '#e0e0e0' }}>
-        <div className="card card-body col-md-5 mx-auto mt-4">
+
+
+    <div className="container-fluid h_100vh" style={{ backgroundColor: '#e0e0e0' }}>
+      <Navbar />
+      <div className="row">
+        <div className="col"></div>
+        <div className="col">
+        <div className="card card-body mt-4">
           <div className="d-flex justify-content-center">
             <h3 className="card-title" style={{ color: '#8AC500' }}>Login</h3>
           </div>
@@ -151,8 +155,11 @@ const Login = (props) => {
           </div>
 
         </div>
+        </div>        
+        <div className="col"></div>
       </div>
-    </>
+    </div>
+
   );
 };
 export default Login;

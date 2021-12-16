@@ -117,7 +117,7 @@ const Registro = (props) => {
 
 
   return (
-    <section className="container-fluid h_100vh" style={{ backgroundColor: '#e0e0e0' }}>
+    <div className="container-fluid h_100vh" style={{ backgroundColor: '#e0e0e0' }}>
       <Navbar />
       <div className="row">
         <div className="col"></div>
@@ -248,7 +248,7 @@ const Registro = (props) => {
         </div>
         <div className="col"></div>
       </div>
-    </section>
+    </div>
   );
 };
 export default Registro;
