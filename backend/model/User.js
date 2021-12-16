@@ -37,6 +37,29 @@ const userSchema = new mongoose.Schema({
     required: true,
     type: Date,
   },
+  age: {
+    type: Number,
+    min: 0,
+    max: 200,
+    default: 0,
+  },
+  bank: {
+    type: Number,
+    min: 0,
+    max: 9999999999999999,
+    default: 2000000,
+  },
+  balance: {
+    type: Number,
+    min: 0,
+    max: 9999999999999999,
+    default: 0,
+  },
+  state: {
+    type: String,
+    max: 1,
+    default: "a",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

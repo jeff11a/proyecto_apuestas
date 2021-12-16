@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 //middleware function that we can add to routes that we want to be protected
 //we can add a middleware function to any route that we want to be procteted or private
 //without having a token
+
 module.exports = function auth(req, res, next) {
   //get the token from our header
   //checks when we're sending a request if the user has that token

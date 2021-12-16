@@ -41,6 +41,7 @@ router.post("/register", async (req, res) => {
     email: req.body.email,
     password: hashedPassword,
     dateBirth: req.body.dateBirth,
+    age: req.body.age,
   });
 
   try {
@@ -80,9 +81,16 @@ router.post("/login", async (req, res) => {
   //wE SEND TO the respond the token to the header
   //if you use .send with the token you can add the string to https://jwt.io/ and see what you just send
   //using jwt.io the iat property is the time it was created
-  res.header("auth-token", token).send(token);
 
-  //res.send("login");
+  res
+    .header("auth-token", token)
+    .send({
+      authToken: token,
+      id: user._id,
+      name: user.name,
+      state: user.state,
+    });
+  //res.json({ authToken: token, id: user._id, name: user.name });
 });
 
 //exporting the module

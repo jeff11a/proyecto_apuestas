@@ -1,6 +1,6 @@
 import { FaUserAlt, FaLockOpen, FaUserCheck } from "react-icons/fa";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import services from "../services/dataHandler";
 
@@ -9,6 +9,9 @@ const Login = (props) => {
   //localStorage.setItem("token", token)
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [loginStatus, setLoginStatus] = useState(null);
+  const navigate = useNavigate();
+
   const loginUrl = "http://localhost:3002/api/user/login";
 
   const onChangeUser = (event) => {
@@ -31,7 +34,14 @@ const Login = (props) => {
     };
     console.log(JSON.stringify(newUser));
     services.create(loginUrl, newUser).then((res) => {
-      console.log(res);
+      if (!res.authToken) {
+        setLoginStatus(false);
+      } else {
+        console.log(res);
+        localStorage.setItem("authToken", res.authToken);
+        console.log(localStorage.getItem("authToken"));
+        navigate("/saldo");
+      }
     });
   };
 

@@ -12,6 +12,7 @@ const registerValidation = (data) => {
     email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required(),
     dateBirth: Joi.string().required(),
+    age: Joi.number().required(),
   });
 
   //LETS VALIDATE THE DATA BEFORE WE MAKE A USER with @hapi/joi

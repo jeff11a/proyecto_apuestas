@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import { FaTrophy } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import services from "../services/dataHandler";
+import utils from "../utils/utils";
 
 const Registro = (props) => {
   const [name, setName] = useState("");
@@ -9,6 +10,7 @@ const Registro = (props) => {
   const [dateBirth, setDateBirth] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [age, setAge] = useState(0);
 
   const registerUrl = "http://localhost:3002/api/user/register";
 
@@ -34,6 +36,7 @@ const Registro = (props) => {
     event.preventDefault();
     setDateBirth(event.target.value);
     console.log(dateBirth);
+    console.log("age ", utils.getAge(dateBirth));
   };
 
   const onChangeEmail = (event) => {
@@ -50,12 +53,17 @@ const Registro = (props) => {
 
   const onClick = (event) => {
     event.preventDefault();
+    const newAge = utils.getAge(dateBirth);
+    console.log("age ", newAge);
+    setAge(newAge);
+
     const newUser = {
       name: name,
       userName: user,
       email: email,
       password: password,
-      dateBirth: new Date(dateBirth).toISOString(),
+      dateBirth: dateBirth,
+      age: newAge,
     };
     console.log(JSON.stringify(newUser));
     services.create(registerUrl, newUser);
