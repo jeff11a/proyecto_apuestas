@@ -25,7 +25,11 @@ const AddUser = () => {
     password: Yup.string()
       .required('Constraseña requerida')
       .min(6, 'La contraseña debe tener al menos 6 caracteres')
-      .max(40, 'La contraseña no debe superar los 40 caracteres'),
+      .max(40, 'La contraseña no debe superar los 40 caracteres')
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+        "La contraseña debe tener por lo menos una mayúscula, una minúscula, un número y un carácter especial"
+      ),
     country: Yup.string()
       .required('País requerido')
       .max(20, 'País no debe superar los 20 caracteres'),

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import UserDataService from "../services/UserService";
+import AuthDataService from "../services/AuthService";
 
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
@@ -26,7 +26,11 @@ const Registro = (props) => {
     password: Yup.string()
       .required('Constraseña requerida')
       .min(6, 'La contraseña debe tener al menos 6 caracteres')
-      .max(40, 'La contraseña no debe superar los 40 caracteres'),
+      .max(40, 'La contraseña no debe superar los 40 caracteres')
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+        "La contraseña debe tener por lo menos una mayúscula, una minúscula, un número y un carácter especial"
+      ),
     country: Yup.string()
       .required('País requerido')
       .max(20, 'País no debe superar los 20 caracteres'),
@@ -79,7 +83,7 @@ const Registro = (props) => {
 
     //console.log(data);
 
-    UserDataService.create(data)
+    AuthDataService.signup(data)
       .then(response => {
         setUser({
           id: response.data.id,
@@ -127,7 +131,7 @@ const Registro = (props) => {
               </div>
               <div className="d-flex justify-content-center">
                 <span style={{ color: '#8AC500' }}>
-                  <i class="fas fa-user-circle fa-6x"></i>
+                  <i className="fas fa-user-circle fa-6x"></i>
                 </span>
               </div>
               <div className="register-form">
