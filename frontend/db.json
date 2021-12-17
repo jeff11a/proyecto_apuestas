@@ -33,12 +33,19 @@
       "tipo_usuario": "c"
     },
     {
-      "id": 4,
-      "nombre": "Jhon",
-      "saldo": 1345666.6666666658,
-      "victorias": 0,
-      "banco": 2060000,
-      "tipo_usuario": "c"
+      "_id": "61bbbbcacf0dba376f39de22",
+      "name": "perez ",
+      "email": "perez1@mail.com",
+      "userName": "perez1",
+      "password": "$2a$10$zboZmNu/1u9pm3bbW1sl/uzWkvhydcnkC23sOw..qjao6ylbj25/W",
+      "dateBirth": "1995-06-16T00:00:00.000Z",
+      "age": 26,
+      "bank": 1480000,
+      "balance": 22000,
+      "state": "a",
+      "createdAt": "2021-12-16T22:20:58.659Z",
+      "__v": 0,
+      "id": 4
     }
   ],
   "competidores": [

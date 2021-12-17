@@ -9,7 +9,8 @@ const mongoose = require("mongoose");
 //Import Routes\
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
-
+//prueba obteniendo usuario
+const userRoute = require("./routes/userData");
 //To initiate the variables in .env
 dotenv.config();
 
@@ -31,6 +32,9 @@ app.use(express.json());
 app.use("/api/user", authRoute);
 //Whenb our users go to /api/posts
 app.use("/api/posts", postRoute);
+
+//prueba obteniendo usuario
+app.use("/api/user", userRoute);
 
 //2 create the folder routes
 

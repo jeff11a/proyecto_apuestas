@@ -7,7 +7,17 @@ import utils from "../utils/utils.js";
 import { btnMoney } from "../utils/utilsCss.js";
 
 const Apostar = () => {
+  const [usuario, setUsuario] = useState({});
   const id = process.env.REACT_APP_CLIENTE;
+  const idUser = localStorage.getItem("id");
+  const userUrl = "http://localhost:3002/api/user";
+  useEffect(() => {
+    dataHandler
+      .getUser(userUrl, localStorage.getItem("authToken"))
+      .then((values) => {
+        setUsuario(values);
+      });
+  }, []);
 
   const [usuarios, setUsuarios] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -29,19 +39,48 @@ const Apostar = () => {
     if (usuarios.length > 0 && utils.isNumeric(inputValue)) {
       const bancoActual = usuarios[id].banco;
       const saldoActual = usuarios[id].saldo;
+
+      const bancoActualDb = usuario.bank;
+      const saldoActualDb = usuario.balance;
+
+      console.log("bank ", bancoActualDb);
+      console.log("saldo ", saldoActualDb);
+
       const saldo = Number(inputValue);
 
-      if (bancoActual >= saldo) {
-        const newSaldo = saldoActual + Number(saldo);
+      // if (bancoActual >= saldo) {
+
+      //   const newSaldo = saldoActual + Number(saldo);
+
+      //   const newUser = {
+      //     ...usuarios[id],
+      //     saldo: newSaldo,
+      //     banco: bancoActual - Number(saldo),
+      //   };
+
+      //   dataHandler
+      //     .update("http://localhost:3001/usuarios", id, newUser)
+      //     .then(setUpdateUsuarios(!updateUsuarios));
+      // } else {
+      //   console.log(
+      //     "No suficiente en el banco ",
+      //     bancoActual,
+      //     " saldo ",
+      //     saldo
+      //   );
+      // }
+      //db
+      if (bancoActualDb >= saldo) {
+        const newSaldoDb = saldoActualDb + Number(saldo);
 
         const newUser = {
-          ...usuarios[id],
-          saldo: newSaldo,
-          banco: bancoActual - Number(saldo),
+          ...usuario,
+          balance: newSaldoDb,
+          bank: bancoActualDb - Number(saldo),
         };
 
         dataHandler
-          .update("http://localhost:3001/usuarios", id, newUser)
+          .updateUser(userUrl, newUser, localStorage.getItem("authToken"))
           .then(setUpdateUsuarios(!updateUsuarios));
       } else {
         console.log(
@@ -93,20 +132,18 @@ const Apostar = () => {
       <div className="col-md-5 rounded_15 mx-auto d-flex flex-column mt-5 p-4 bg_grayAlto">
         <div className="bg_darkHeavyMetal d text_gold d-flex flex-row mb-2 p-1 rounded_15 shadow">
           <span className="me-auto fs-4">
-            Hola {usuarios.length > 0 ? usuarios[id].nombre : "Jhon"}
+            Hola {usuario.length > 0 ? usuario.name : "Jhon"}
           </span>
 
           <span className="text-end fs-4">
-            ${usuarios.length > 0 ? usuarios[id].saldo.toFixed(2) : "0.00"}{" "}
-            <br />
+            ${usuario.length > 0 ? usuario.balance : "0.00"} <br />
             Saldo actual
           </span>
         </div>
         <div className="bg_darkHeavyMetal d text_gold d-flex flex-row mb-2 p-1 rounded_15 shadow">
           <span className="me-auto">Total en Banco</span>
           <span className="text-end">
-            ${usuarios.length > 0 ? usuarios[id].banco.toFixed(2) : "0.00"}{" "}
-            <br />
+            ${usuario.length > 0 ? usuario.bank : "0.00"} <br />
           </span>
         </div>
         <div className="d-flex flex-row">
