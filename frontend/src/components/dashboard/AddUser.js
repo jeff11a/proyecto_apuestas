@@ -151,7 +151,7 @@ const AddUser = () => {
               <form onSubmit={handleSubmit(saveUser)}>
 
                 <div className="form-group">
-                  <label>Nombre <span style={{color: 'red'}}>*</span></label>
+                  <label>Nombre <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="firstName"
                     type="text"
@@ -164,7 +164,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Apellido <span style={{color: 'red'}}>*</span></label>
+                  <label>Apellido <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="lastName"
                     type="text"
@@ -177,7 +177,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Correo <span style={{color: 'red'}}>*</span></label>
+                  <label>Correo <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="email"
                     type="email"
@@ -190,7 +190,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Contraseña <span style={{color: 'red'}}>*</span></label>
+                  <label>Contraseña <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="password"
                     type="password"
@@ -203,7 +203,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>País <span style={{color: 'red'}}>*</span></label>
+                  <label>País <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="country"
                     type="text"
@@ -216,7 +216,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Teléfono <span style={{color: 'red'}}>*</span></label>
+                  <label>Teléfono <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="phoneNumber"
                     type="number"
@@ -229,7 +229,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Fecha de Nacimiento <span style={{color: 'red'}}>*</span></label>
+                  <label>Fecha de Nacimiento <span style={{ color: 'red' }}>*</span></label>
                   <input
                     name="birthday"
                     type="date"
@@ -242,7 +242,7 @@ const AddUser = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="roles">Rol <span style={{color: 'red'}}>*</span></label>
+                  <label htmlFor="roles">Rol <span style={{ color: 'red' }}>*</span></label>
                   <select className="form-select" name="roles" id="roles" {...register('roles')} onChange={handleInputChange} value={user.roles}>
                     <option value="Cliente">Cliente</option>
                     <option value="Interno">Interno</option>

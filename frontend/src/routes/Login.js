@@ -99,63 +99,63 @@ const Login = (props) => {
       <div className="row">
         <div className="col"></div>
         <div className="col">
-        <div className="card card-body mt-4">
-          <div className="d-flex justify-content-center">
-            <h3 className="card-title" style={{ color: '#8AC500' }}>Login</h3>
+          <div className="card card-body mt-4">
+            <div className="d-flex justify-content-center">
+              <h3 className="card-title" style={{ color: '#8AC500' }}>Login</h3>
+            </div>
+            <div className="d-flex justify-content-center">
+              <span style={{ color: '#8AC500' }}>
+                <i className="fas fa-user-circle fa-6x"></i>
+              </span>
+            </div>
+            <div className="register-form mt-4">
+              <form onSubmit={handleSubmit(handleLogin)}>
+                <div className="form-group">
+                  <label>Correo <span style={{ color: 'red' }}>*</span></label>
+                  <input
+                    name="email"
+                    type="email"
+                    {...register('email')}
+                    className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                    value={login.email}
+                    onChange={handleInputChange}
+                  />
+                  <div className="invalid-feedback">{errors.email?.message}</div>
+                </div>
+
+                <div className="form-group">
+                  <label>Contraseña <span style={{ color: 'red' }}>*</span></label>
+                  <input
+                    name="password"
+                    type="password"
+                    {...register('password')}
+                    className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                    value={login.password}
+                    onChange={handleInputChange}
+                    autoComplete="new-password"
+                  />
+                  <div className="invalid-feedback">{errors.password?.message}</div>
+                </div>
+
+                <div className="d-flex form-group justify-content-center">
+                  <button type="submit" className="btn btn1 bg_greenPistachio">
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    onClick={reset}
+                    className="btn btn-warning float-right"
+                    style={{ display: 'none' }}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
+
+            </div>
+
           </div>
-          <div className="d-flex justify-content-center">
-            <span style={{ color: '#8AC500' }}>
-              <i className="fas fa-user-circle fa-6x"></i>
-            </span>
-          </div>
-          <div className="register-form mt-4">
-            <form onSubmit={handleSubmit(handleLogin)}>
-              <div className="form-group">
-                <label>Correo <span style={{ color: 'red' }}>*</span></label>
-                <input
-                  name="email"
-                  type="email"
-                  {...register('email')}
-                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                  value={login.email}
-                  onChange={handleInputChange}
-                />
-                <div className="invalid-feedback">{errors.email?.message}</div>
-              </div>
-
-              <div className="form-group">
-                <label>Contraseña <span style={{ color: 'red' }}>*</span></label>
-                <input
-                  name="password"
-                  type="password"
-                  {...register('password')}
-                  className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                  value={login.password}
-                  onChange={handleInputChange}
-                  autoComplete="new-password"
-                />
-                <div className="invalid-feedback">{errors.password?.message}</div>
-              </div>
-
-              <div className="d-flex form-group justify-content-center">
-                <button type="submit" className="btn btn1 bg_greenPistachio">
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={reset}
-                  className="btn btn-warning float-right"
-                  style={{ display: 'none' }}
-                >
-                  Reset
-                </button>
-              </div>
-            </form>
-
-          </div>
-
         </div>
-        </div>        
         <div className="col"></div>
       </div>
     </div>

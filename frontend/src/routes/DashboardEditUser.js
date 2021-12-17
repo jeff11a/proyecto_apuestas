@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 
 import Sidebar2 from "../components/Sidebar2";
 import Navbar2 from "../components/Navbar2";
-import HomeDashboard from "../components/HomeDashboard"
+import User from "../components/dashboard/Users";
 
-import "../assets/css/sb-admin-2.css"
-
-const Dashboard = (props) => {
+const DashboardEditUser = () => {
   let navigate = useNavigate();
 
   const [showInternoBoard, setShowInternoBoard] = useState(false);
@@ -29,28 +28,21 @@ const Dashboard = (props) => {
     }
   }, []);
 
-
-
-
   return (
     <React.Fragment>
-      {(showAdminBoard || showInternoBoard) ? (
-
-        <div id="dashboard">
+      {(showAdminBoard || showInternoBoard) ?
+        (<div id="dashboard">
           <Sidebar2></Sidebar2>
           <div id="content-dashboard" className="d-flex flex-column">
             <div id="content">
               <Navbar2></Navbar2>
-              <HomeDashboard></HomeDashboard>
+              <User></User>
             </div>
           </div>
-        </div>
-
-      ) : redirect()}
+        </div>) : redirect()
+      }
     </React.Fragment>
+  )
 
-  );
-
-};
-
-export default Dashboard;
+}
+export default DashboardEditUser;

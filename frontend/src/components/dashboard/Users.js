@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import UserDataService from "../../services/UserService";
-import Sidebar2 from "../Sidebar2";
-import Navbar2 from "../Navbar2";
 import moment from 'moment';
 //import { Dialog } from "@material-ui/core";
 
@@ -94,181 +92,173 @@ const User = (props) => {
   };
 
   return (
-    <div id="dashboard">
-      <Sidebar2></Sidebar2>
-      <div id="content-dashboard" className="d-flex flex-column">
-        <div id="content">
-          <Navbar2></Navbar2>
-          <div className="row">
-            <div className="col-3">
-            </div>
-            <div className="col">
-              <div className="card mb-4">
-                <div className="card-body">
-                  <h5 className="card-title">Editar Usuario</h5>
 
+    <div className="row">
+      <div className="col-3">
+      </div>
+      <div className="col">
+        <div className="card mb-4">
+          <div className="card-body">
+            <h5 className="card-title">Editar Usuario</h5>
 
+            <div>
+              {currentUser ? (
+                <div className="edit-form">
 
-                  <div>
-                    {currentUser ? (
-                      <div className="edit-form">
+                  <form>
 
-                        <form>
+                    <div className="form-group">
+                      <label htmlFor="firstName">Nombres</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="firstName"
+                        required
+                        value={currentUser.firstName}
+                        onChange={handleInputChange}
+                        name="firstName"
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="firstName">Nombres</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="firstName"
-                              required
-                              value={currentUser.firstName}
-                              onChange={handleInputChange}
-                              name="firstName"
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="lastName">Apellidos</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="lastName"
+                        required
+                        value={currentUser.lastName}
+                        onChange={handleInputChange}
+                        name="lastName"
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="lastName">Apellidos</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="lastName"
-                              required
-                              value={currentUser.lastName}
-                              onChange={handleInputChange}
-                              name="lastName"
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="email">email</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        required
+                        value={currentUser.email}
+                        onChange={handleInputChange}
+                        name="email"
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="email">email</label>
-                            <input
-                              type="email"
-                              className="form-control"
-                              id="email"
-                              required
-                              value={currentUser.email}
-                              onChange={handleInputChange}
-                              name="email"
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="password" style={{ display: 'none' }}>Contraseña</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        required
+                        value={currentUser.password}
+                        onChange={handleInputChange}
+                        name="password"
+                        style={{ display: 'none' }}
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="password" style={{ display: 'none' }}>Contraseña</label>
-                            <input
-                              type="password"
-                              className="form-control"
-                              id="password"
-                              required
-                              value={currentUser.password}
-                              onChange={handleInputChange}
-                              name="password"
-                              style={{ display: 'none' }}
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="country">País</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="country"
+                        required
+                        value={currentUser.country}
+                        onChange={handleInputChange}
+                        name="country"
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="country">País</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="country"
-                              required
-                              value={currentUser.country}
-                              onChange={handleInputChange}
-                              name="country"
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="phoneNumber">Teléfono</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="phoneNumber"
+                        required
+                        value={currentUser.phoneNumber}
+                        onChange={handleInputChange}
+                        name="phoneNumber"
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="phoneNumber">Teléfono</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              id="phoneNumber"
-                              required
-                              value={currentUser.phoneNumber}
-                              onChange={handleInputChange}
-                              name="phoneNumber"
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="birthday">Fecha de Nacimiento:</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="birthday"
+                        required
+                        value={moment(currentUser.birthday).format('YYYY-MM-DD')}
+                        onChange={handleInputChange}
+                        name="birthday"
+                      />
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="birthday">Fecha de Nacimiento:</label>
-                            <input
-                              type="date"
-                              className="form-control"
-                              id="birthday"
-                              required
-                              value={moment(currentUser.birthday).format('YYYY-MM-DD')}
-                              onChange={handleInputChange}
-                              name="birthday"
-                            />
-                          </div>
+                    <div className="form-group">
+                      <label htmlFor="roles" style={{ display: 'none' }}>Tipo de usuario</label>
+                      <select className="form-select" name="roles" id="roles" onChange={handleInputChange} value={currentUser.roles} >
+                        <option value="Cliente">Cliente</option>
+                        <option value="Interno">Interno</option>
+                        <option value="Admin">Administrador</option>
+                      </select>
+                    </div>
 
-                          <div className="form-group">
-                            <label htmlFor="roles" style={{ display: 'none' }}>Tipo de usuario</label>
-                            <select className="form-select" name="roles" id="roles" onChange={handleInputChange} value={currentUser.roles} >
-                              <option value="Cliente">Cliente</option>
-                              <option value="Interno">Interno</option>
-                              <option value="Admin">Administrador</option>
-                            </select>
-                          </div>
+                    <div className="form-group">
+                      <label>
+                        <strong>Activado:</strong>
+                      </label>
+                      {currentUser.active ? " Activo" : " Inactivo"}
+                    </div>
+                  </form>
 
-                          <div className="form-group">
-                            <label>
-                              <strong>Activado:</strong>
-                            </label>
-                            {currentUser.active ? " Activo" : " Inactivo"}
-                          </div>
-                        </form>
+                  {currentUser.active ? (
+                    <button
+                      className="btn btn-primary mr-2"
+                      onClick={() => updatePublished(false)}
+                    >
+                      Desactivar
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary me-2"
+                      onClick={() => updatePublished(true)}
+                    >
+                      Activar
+                    </button>
+                  )}
 
-                        {currentUser.active ? (
-                          <button
-                            className="btn btn-primary mr-2"
-                            onClick={() => updatePublished(false)}
-                          >
-                            Desactivar
-                          </button>
-                        ) : (
-                          <button
-                            className="btn btn-primary me-2"
-                            onClick={() => updatePublished(true)}
-                          >
-                            Activar
-                          </button>
-                        )}
+                  <button className="btn btn-danger me-2" onClick={deleteUser}>
+                    Eliminar
+                  </button>
 
-                        <button className="btn btn-danger me-2" onClick={deleteUser}>
-                          Eliminar
-                        </button>
-
-                        <button
-                          type="submit"
-                          className="btn btn-success"
-                          onClick={updateUser}
-                        >
-                          Actualizar
-                        </button>
-                        <p>{message}</p>
-                      </div>
-                    ) : (
-                      <div>
-                        <br />
-                        <p>Por favor haga clic en un usuario...</p>
-                      </div>
-                    )}
-                  </div>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    onClick={updateUser}
+                  >
+                    Actualizar
+                  </button>
+                  <p>{message}</p>
                 </div>
-              </div>
-            </div>
-            <div className="col-3">
+              ) : (
+                <div>
+                  <br />
+                  <p>Por favor haga clic en un usuario...</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+      <div className="col-3">
+      </div>
     </div>
+
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 
-import { BrowserRouter, Routes,  Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //Paginas
 import App from "./App";
@@ -10,12 +10,12 @@ import Registro from "./routes/Registro";
 import Saldo from "./routes/Saldo";
 import Finalizados from "./routes/Finalizados";
 import Dashboard from "./routes/Dashboard";
-import UsersList from "./components/dashboard/UsersList";
+import DashboardUsers from "./routes/DashboardUsers";
 import DashboardAddUser from "./routes/DashboardAddUser";
 import DashboardAddBet from "./routes/DashboardAddBet";
-import User from "./components/dashboard/Users";
-import Bets from "./components/dashboard/Bets";
-import BetsList from "./components/dashboard/BetsList";
+import DashboardEditUser from "./routes/DashboardEditUser";
+import DashboardEditBet from "./routes/DashboardEditBet";
+import DashboardBets from "./routes/DashboardBets";
 import DashboardReports from "./routes/DashboardReports";
 import NoPage from "./routes/NoPage";
 //CSS
@@ -43,15 +43,15 @@ render(
       <Route path="/registro" element={<Registro />} />
       <Route path="/saldo" element={<Saldo />} />
       <Route path="/finalizados" element={<Finalizados />} />
-      <Route path="/dashboard" element={<Dashboard/>} />
-      <Route path="/dashboard/users" element={<UsersList/>} />
-      <Route path="/dashboard/users/:id" element={<User/>} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard/users" element={<DashboardUsers />} />
+      <Route path="/dashboard/users/:id" element={<DashboardEditUser />} />
       <Route path="/dashboard/addUser" element={<DashboardAddUser />} />
-      <Route path="/dashboard/bets" element={<BetsList />} />
-      <Route path="/dashboard/bets/:id" element={<Bets />} />
+      <Route path="/dashboard/bets" element={<DashboardBets />} />
+      <Route path="/dashboard/bets/:id" element={<DashboardEditBet />} />
       <Route path="/dashboard/addBet" element={<DashboardAddBet />} />
       <Route path="/dashboard/reports" element={<DashboardReports />} />
-      <Route path="*" element={<NoPage/>}/>
+      <Route path="*" element={<NoPage />} />
     </Routes>
   </BrowserRouter>,
   rootElement

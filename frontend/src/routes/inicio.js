@@ -2,8 +2,8 @@ import Navbar from "../components/Navbar";
 const Inicio = (props) => {
   return (
     <>
-      <Navbar/>
-      
+      <Navbar />
+
       <h2 className="display-1">Inicio</h2>
     </>
   );

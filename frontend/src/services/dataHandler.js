@@ -4,9 +4,9 @@ import axios from "axios";
 //We no longer return the promise returned by axios directly. Instead, we assign the promise to the request variable and call its then method:
 //The modified getAll function still returns a promise, as the then method of a promise also returns a promise.
 const getAll = (baseUrl) => {
-  const request =   axios.get(baseUrl);
+  const request = axios.get(baseUrl);
   return request.then(response => response.data);
-  
+
 };
 
 const create = (baseUrl, newObject) => {

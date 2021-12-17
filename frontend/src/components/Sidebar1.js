@@ -22,18 +22,18 @@ const Sidebar = (props) => {
       <ul className="nav nav-pills flex-column mb-auto">
         {eventos.length > 1
           ? eventos.map((evento, i) => (
-              <li className="nav-item" key={i}>
-                <a
-                  href="/#"
-                  className="nav-link text-white d-flex align-items-center"
-                  onClick={onClick}
-                  value1={evento.id}
-                  key={evento.id}
-                >
-                  {evento.evento}
-                </a>
-              </li>
-            ))
+            <li className="nav-item" key={i}>
+              <a
+                href="/#"
+                className="nav-link text-white d-flex align-items-center"
+                onClick={onClick}
+                value1={evento.id}
+                key={evento.id}
+              >
+                {evento.evento}
+              </a>
+            </li>
+          ))
           : null}
       </ul>
     </div>

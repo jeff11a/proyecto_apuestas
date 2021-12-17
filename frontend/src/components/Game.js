@@ -1,7 +1,7 @@
 import { FaChess } from "react-icons/fa";
 import { FaDollarSign } from "react-icons/fa";
 import Button from "../components/Button";
-import chessboard from "../assets/chessboard.jpg";
+import chessboard from "../assets/img/chessboard.jpg";
 import { useState, useEffect } from "react";
 import dataHandler from "../services/dataHandler";
 import utils from "../utils/utils.js";

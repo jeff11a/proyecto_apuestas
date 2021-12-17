@@ -97,13 +97,14 @@ const Navbar = () => {
 
   const mostrarBar2 = () => {
     switch (pathname) {
-      case "/login":
-      case "/registro":
-        isLogin = false;
+      case "/":
+      case "/saldo":
+      case "/finalizados":
+        isLogin = true;
         break;
 
       default:
-        isLogin = true;
+        isLogin = false;
         break;
     }
   }
