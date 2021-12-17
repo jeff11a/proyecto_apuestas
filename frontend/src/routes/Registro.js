@@ -3,6 +3,7 @@ import { FaTrophy } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import services from "../services/dataHandler";
 import utils from "../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const Registro = (props) => {
   const [name, setName] = useState("");
@@ -11,14 +12,9 @@ const Registro = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [age, setAge] = useState(0);
+  const navigate = useNavigate();
 
   const registerUrl = "http://localhost:3002/api/user/register";
-
-  // const onChange = (event) => (setEvent) => {
-
-  //   event.preventDefault();
-  //   setEvent(event.target.value);
-  // };
 
   const onChangeName = (event) => {
     event.preventDefault();
@@ -66,7 +62,9 @@ const Registro = (props) => {
       age: newAge,
     };
     console.log(JSON.stringify(newUser));
-    services.create(registerUrl, newUser);
+    services.create(registerUrl, newUser).then(() => {
+      navigate("/login");
+    });
   };
 
   return (
