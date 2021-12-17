@@ -9,8 +9,9 @@ const mongoose = require("mongoose");
 //Import Routes\
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
-//prueba obteniendo usuario
+const eventsRoute = require("./routes/events");
 const userRoute = require("./routes/userData");
+const historyRoute = require("./routes/history");
 //To initiate the variables in .env
 dotenv.config();
 
@@ -32,6 +33,9 @@ app.use(express.json());
 app.use("/api/user", authRoute);
 //Whenb our users go to /api/posts
 app.use("/api/posts", postRoute);
+
+app.use("/api/eventos", eventsRoute);
+app.use("/api/historial", historyRoute);
 
 //prueba obteniendo usuario
 app.use("/api/user", userRoute);

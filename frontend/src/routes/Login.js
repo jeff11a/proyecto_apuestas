@@ -41,6 +41,7 @@ const Login = (props) => {
         localStorage.setItem("authToken", res.authToken);
         localStorage.setItem("id", res.id);
         console.log(localStorage.getItem("authToken"));
+        console.log(localStorage.getItem("id"));
         navigate("/saldo");
       }
     });

@@ -31,5 +31,31 @@ const loginValidation = (data) => {
   return schema.validate(data);
 };
 
+//events validation
+
+const eventsValidation = (data) => {
+  const schema = Joi.object({
+    evento: Joi.string().min(3).required(),
+    participantes: Joi.array().items(Joi.string()),
+  });
+  return schema.validate(data);
+};
+
+const historyValidation = (data) => {
+  const schema = Joi.object({
+    idUser: Joi.string().required(),
+    victoria: Joi.boolean().required(),
+    apuesta: Joi.string().required(),
+    ganador: Joi.string().required(),
+    fecha: Joi.string(),
+    ganancia: Joi.number().required(),
+    perdida: Joi.number().required(),
+  });
+
+  return schema.validate(data);
+};
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.eventsValidation = eventsValidation;
+module.exports.historyValidation = historyValidation;
