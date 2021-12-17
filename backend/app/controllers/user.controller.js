@@ -33,6 +33,7 @@ exports.create = (req, res) => {
     birthday: req.body.birthday,
     bets: req.body.bets ? req.body.bets : [],
     balance: req.body.balance ? req.body.balance : 0,
+    banco: req.body.banco ? req.body.banco : 300000,
     active: req.body.active ? req.body.active : true
   });
 
@@ -146,6 +147,7 @@ exports.findOne = (req, res) => {
           bets: user.bets,
           roles: role.name,
           balance: user.balance,
+          banco: user.banco,
           active: user.active
         }
         //console.log(usuario);
@@ -179,10 +181,11 @@ exports.update = (req, res) => {
       bets: req.body.bets,
       roles: role._id,
       balance: req.body.balance,
+      banco: req.body.banco,
       active: req.body.active
     }
     const id = req.params.id;
-    console.log(usuario);
+    //console.log(usuario);
 
     User.findByIdAndUpdate(id, usuario, { useFindAndModify: false })
       .then(data => {
@@ -261,11 +264,7 @@ exports.findAllActive = (req, res) => {
 };
 
 //Contador de usuarios
-/* 
-, function (err, count) {
-    console.log('hay %d usuarios', count);
-  }
-*/
+
 exports.countUser = (req, res) => {
   User.countDocuments()
     .then(count => {

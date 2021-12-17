@@ -29,7 +29,7 @@ const DashboardAddBet = () => {
     } else {
       navigate("/login")
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <React.Fragment>

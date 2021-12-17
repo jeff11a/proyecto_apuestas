@@ -9,8 +9,8 @@ import GestionReportes from "../components/GestionReportes"
 
 import "../assets/css/sb-admin-2.css"
 
-const DashboardReports = () => {
-
+const DashboardReports = () => { 
+  
   let navigate = useNavigate();
 
   const [showInternoBoard, setShowInternoBoard] = useState(false);

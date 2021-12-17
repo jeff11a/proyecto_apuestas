@@ -91,3 +91,9 @@
   border-radius: 15px;
   color: #2d2e2c;
 }
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}

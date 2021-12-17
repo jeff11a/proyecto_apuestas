@@ -50,6 +50,11 @@ module.exports = (mongoose, mongoosePaginate) => {
         required: false,
         default: 0
       },
+      banco: {
+        type: Number, 
+        required: false,
+        default: 0
+      },
       bets: [
         {
           type: mongoose.Schema.Types.ObjectId,

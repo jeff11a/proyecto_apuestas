@@ -91,9 +91,6 @@ const Login = (props) => {
   });
 
   return (
-
-
-
     <div className="container-fluid h_100vh" style={{ backgroundColor: '#e0e0e0' }}>
       <Navbar />
       <div className="row">
@@ -149,7 +146,7 @@ const Login = (props) => {
                   >
                     Reset
                   </button>
-                </div>
+                </div>                
               </form>
 
             </div>

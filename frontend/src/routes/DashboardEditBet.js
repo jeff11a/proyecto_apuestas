@@ -27,7 +27,7 @@ const DashboardEditBet = () => {
     } else {
       navigate("/login")
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <React.Fragment>
