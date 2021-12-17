@@ -7,9 +7,9 @@ import utils from "../utils/utils.js";
 import { btnMoney } from "../utils/utilsCss.js";
 
 const Apostar = () => {
+  const [inputValue, setInputValue] = useState("");
+  const [updateUsuarios, setUpdateUsuarios] = useState(false);
   const [usuario, setUsuario] = useState({});
-  const id = process.env.REACT_APP_CLIENTE;
-  const idUser = localStorage.getItem("id");
   const userUrl = "http://localhost:3002/api/user";
   useEffect(() => {
     dataHandler
@@ -17,16 +17,6 @@ const Apostar = () => {
       .then((values) => {
         setUsuario(values);
       });
-  }, []);
-
-  const [usuarios, setUsuarios] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [updateUsuarios, setUpdateUsuarios] = useState(false);
-
-  useEffect(() => {
-    dataHandler
-      .getAll("http://localhost:3001/usuarios")
-      .then((values) => setUsuarios(values));
   }, [updateUsuarios]);
 
   const onClick = (event) => {
@@ -36,40 +26,12 @@ const Apostar = () => {
   };
 
   const depositar = () => {
-    if (usuarios.length > 0 && utils.isNumeric(inputValue)) {
-      const bancoActual = usuarios[id].banco;
-      const saldoActual = usuarios[id].saldo;
-
+    if (usuario && utils.isNumeric(inputValue)) {
       const bancoActualDb = usuario.bank;
       const saldoActualDb = usuario.balance;
 
-      console.log("bank ", bancoActualDb);
-      console.log("saldo ", saldoActualDb);
-
       const saldo = Number(inputValue);
 
-      // if (bancoActual >= saldo) {
-
-      //   const newSaldo = saldoActual + Number(saldo);
-
-      //   const newUser = {
-      //     ...usuarios[id],
-      //     saldo: newSaldo,
-      //     banco: bancoActual - Number(saldo),
-      //   };
-
-      //   dataHandler
-      //     .update("http://localhost:3001/usuarios", id, newUser)
-      //     .then(setUpdateUsuarios(!updateUsuarios));
-      // } else {
-      //   console.log(
-      //     "No suficiente en el banco ",
-      //     bancoActual,
-      //     " saldo ",
-      //     saldo
-      //   );
-      // }
-      //db
       if (bancoActualDb >= saldo) {
         const newSaldoDb = saldoActualDb + Number(saldo);
 
@@ -85,7 +47,7 @@ const Apostar = () => {
       } else {
         console.log(
           "No suficiente en el banco ",
-          bancoActual,
+          bancoActualDb,
           " saldo ",
           saldo
         );
@@ -96,27 +58,30 @@ const Apostar = () => {
   };
 
   const retirar = () => {
-    if (usuarios.length > 0 && utils.isNumeric(inputValue)) {
-      const bancoActual = usuarios[id].banco;
-      const saldoActual = usuarios[id].saldo;
+    if (usuario && utils.isNumeric(inputValue)) {
+      const bancoActualDb = usuario.bank;
+      const saldoActualDb = usuario.balance;
+
+      console.log("bank ", bancoActualDb);
+      console.log("saldo ", saldoActualDb);
       const saldo = Number(inputValue);
 
-      if (saldoActual > 0) {
-        const newBanco = bancoActual + Number(saldo);
+      if (saldoActualDb > 0) {
+        const newBanco = bancoActualDb + Number(saldo);
 
         const newUser = {
-          ...usuarios[id],
-          banco: newBanco,
-          saldo: saldoActual - Number(saldo),
+          ...usuario,
+          bank: newBanco,
+          balance: saldoActualDb - Number(saldo),
         };
 
         dataHandler
-          .update("http://localhost:3001/usuarios", id, newUser)
+          .updateUser(userUrl, newUser, localStorage.getItem("authToken"))
           .then(setUpdateUsuarios(!updateUsuarios));
       } else {
         console.log(
           "No suficiente en el banco ",
-          bancoActual,
+          bancoActualDb,
           " saldo ",
           saldo
         );
@@ -132,18 +97,18 @@ const Apostar = () => {
       <div className="col-md-5 rounded_15 mx-auto d-flex flex-column mt-5 p-4 bg_grayAlto">
         <div className="bg_darkHeavyMetal d text_gold d-flex flex-row mb-2 p-1 rounded_15 shadow">
           <span className="me-auto fs-4">
-            Hola {usuario.length > 0 ? usuario.name : "Jhon"}
+            Hola {usuario ? usuario.name : "Jhon"}
           </span>
 
           <span className="text-end fs-4">
-            ${usuario.length > 0 ? usuario.balance : "0.00"} <br />
+            ${usuario ? usuario.balance : "0.00"} <br />
             Saldo actual
           </span>
         </div>
         <div className="bg_darkHeavyMetal d text_gold d-flex flex-row mb-2 p-1 rounded_15 shadow">
           <span className="me-auto">Total en Banco</span>
           <span className="text-end">
-            ${usuario.length > 0 ? usuario.bank : "0.00"} <br />
+            ${usuario ? usuario.bank : "0.00"} <br />
           </span>
         </div>
         <div className="d-flex flex-row">
