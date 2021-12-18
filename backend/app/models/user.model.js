@@ -57,10 +57,13 @@ module.exports = (mongoose, mongoosePaginate) => {
       },
       bets: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Bet",
-          value: Number,
-          player: String
+          id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Bet"
+          },
+          valueAp: Number,
+          playerAp: String,
+          fechaAp: Date,
         }
       ]
     },

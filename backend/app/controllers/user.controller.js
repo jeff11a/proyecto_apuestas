@@ -159,48 +159,79 @@ exports.findOne = (req, res) => {
 
 // Actualizar un usuario por el id
 exports.update = (req, res) => {
+
   if (!req.body) {
     return res.status(400).send({
       message: "¡Los datos para actualizar no pueden estar vacíos!"
     });
   }
 
-  Role.findOne({ name: req.body.roles }, (err, role) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    const usuario = {
-      id: req.body.id,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      country: req.body.country,
-      phoneNumber: req.body.phoneNumber,
-      birthday: req.body.birthday,
-      bets: req.body.bets,
-      roles: role._id,
-      balance: req.body.balance,
-      banco: req.body.banco,
-      active: req.body.active
-    }
-    const id = req.params.id;
-    //console.log(usuario);
+  if(req.body.roles === "Admin" || req.body.roles === "Interno" || req.body.roles === "Cliente"){
 
-    User.findByIdAndUpdate(id, usuario, { useFindAndModify: false })
-      .then(data => {
-        if (!data) {
-          res.status(404).send({
-            message: `No se puede actualizar el usuario con id = ${id}. ¡Quizás no se encontró el usuario!`
+    Role.findOne({ name: req.body.roles }, (err, role) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      const usuario = {
+        id: req.body.id,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        country: req.body.country,
+        phoneNumber: req.body.phoneNumber,
+        birthday: req.body.birthday,
+        bets: req.body.bets,
+        roles: role._id,
+        balance: req.body.balance,
+        banco: req.body.banco,
+        active: req.body.active
+      }
+      const id = req.params.id;
+      //console.log(usuario);
+  
+      User.findByIdAndUpdate(id, usuario, { useFindAndModify: false })
+        .then(data => {
+          if (!data) {
+            res.status(404).send({
+              message: `No se puede actualizar el usuario con id = ${id}. ¡Quizás no se encontró el usuario!`
+            });
+          } else res.send({ message: "El usuario se actualizó correctamente." });
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: "Error al actualizar el usuario con id =" + id
           });
-        } else res.send({ message: "El usuario se actualizó correctamente." });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error al actualizar el usuario con id =" + id
         });
-      });
-  });
+
+    });
+    
+  }else{
+
+    Role.findOne({ _id: req.body.roles }, (error, role) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      const id = req.params.id;
+      
+      User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+        .then(data => {
+          if (!data) {
+            res.status(404).send({
+              message: `No se puede actualizar el usuario con id = ${id}. ¡Quizás no se encontró el usuario!`
+            });
+          } else res.send({ message: "El usuario se actualizó correctamente." });
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: "Error al actualizar el usuario con id =" + id
+          });
+        });
+
+    });
+    
+  }
 
 };
 
@@ -280,16 +311,25 @@ exports.countUser = (req, res) => {
 
 //Contador de usuarios cliente
 exports.countUserClient = (req, res) => {
-  const nUser = User.countDocuments({ typeUser: "C" })
-    .then(count => {
-      res.send({ cont: count });
-    })
+  Role.findOne({ name: "Cliente"})
+    .then( role => {
+      User.countDocuments({ roles: role._id, active: true })
+      .then(count => {
+        res.send({ cont: count });
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "No se pudo contar los usuarios clientes"
+        });
+      });
+    }) 
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "No se pudo contar los usuarios clientes"
+          err.message || "No se pudo encontrar el rol"
       });
-    });
+    }); 
 };
 
 

@@ -2,106 +2,140 @@ import { FaChess } from "react-icons/fa";
 import { FaDollarSign } from "react-icons/fa";
 import Button from "../components/Button";
 import chessboard from "../assets/img/chessboard.jpg";
-import { useState, useEffect } from "react";
-import dataHandler from "../services/dataHandler";
-import utils from "../utils/utils.js";
+import { useState } from "react";
 import { btnMoney } from "../utils/utilsCss.js";
 
-const Game = (props) => {
-  const id = process.env.REACT_APP_CLIENTE;
-  const urlUsuarios = "http://localhost:3001/usuarios";
-  const { eventoActual, eventos, usuarios, setUsuarios } = props;
-  const [eventoGanador, setEventoGanador] = useState("");
-  const [condicionalGanador, setCondicionalGanador] = useState();
-  const [inputValue, setInputValue] = useState("");
-  const [updateUsuarios, setUpdateUsuarios] = useState(false);
 
-  useEffect(() => {
-    dataHandler.getAll(urlUsuarios).then((values) => setUsuarios(values));
-  }, [updateUsuarios, setUsuarios]);
+import BetDataService from "../services/BetService";
+import UserDataService from "../services/UserService";
+
+const Game = (props) => {
+
+  const { eventoActual, eventos, usuario, posicion } = props;
+
+  const [inputValue, setInputValue] = useState("");
+  const [selectValue, setSelectValue] = useState(""); 
+
+  const updateBet = () => {
+    BetDataService.update(eventos[posicion].id, eventos[posicion])
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  const updateUser = () => {
+    UserDataService.update(usuario.id, usuario)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
 
   const onClick = (event) => {
-    //Funcion que toma el atributo value y lo asigna a un state
     event.preventDefault();
     setInputValue(event.target.value);
   };
 
-  const apostadores = [
-    {
-      nombre: "Marcos",
-      cantidad: 50000,
-      ganador: null,
-      id: 0,
-      opcion: 1,
-    },
-    {
-      nombre: "Carlos",
-      cantidad: 100000,
-      ganador: null,
-      id: 1,
-      opcion: 2,
-    },
-    {
-      nombre: "Juan",
-      cantidad: 200000,
-      ganador: null,
-      id: 2,
-      opcion: 1,
-    },
-  ];
-
-  const apostar = (event) => {
+  const selectChange = (event) => {
     event.preventDefault();
-    setEventoGanador("");
-    if (usuarios.length > 0 && utils.isNumeric(inputValue)) {
-      const usuarioApuesta = Math.floor(Math.random() * 2);
-
-      //Cuando se da click en apostar se resta del saldo el dinero a espera si gano
-      dataHandler.update();
-      switch (usuarioApuesta) {
-        case 0:
-          console.log("perdio");
-
-          setEventoGanador("Perdio");
-          setCondicionalGanador(false);
-          break;
-        case 1:
-          console.log("gano");
-          setEventoGanador("Gano");
-          setCondicionalGanador(true);
-          ganancia();
-          break;
-
-        default:
-          break;
-      }
-
-      console.log(usuarioApuesta);
-    } else {
-      console.log("No es un numero");
-    }
+    setSelectValue(event.target.value)
   };
 
-  const ganancia = () => {
-    const bancoActual = usuarios[id].banco;
-    const saldoActual = usuarios[id].saldo;
-    const apostado = Number(inputValue);
+  const fechaActual = () => {
+    let date = new Date()
+    let day = date.getDate()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
 
-    if (apostado) {
-      const newSaldo = saldoActual + Number(apostado);
-
-      const newUser = {
-        ...usuarios[id],
-        saldo: newSaldo,
-      };
-
-      dataHandler
-        .update(urlUsuarios, id, newUser)
-        .then(setUpdateUsuarios(!updateUsuarios));
-    } else {
-      console.log("banco ", bancoActual, " apostado ", apostado);
+    if(month < 10){
+      return `${year}-0${month}-${day}`;
+    }else{
+      return `${year}-${month}-${day}`;
     }
-  };
+  }
+  
+
+  const apostar = () => {
+    const evento = eventos[posicion];
+    const saldoActual = usuario.balance;
+    const saldo = Number(inputValue);
+
+    if (saldoActual >= saldo) {
+
+      usuario.balance = saldoActual - Number(saldo);
+      if(selectValue === evento.player1){
+        evento.totalP1 = evento.totalP1 + 1;
+        evento.saldoP1 = evento.saldoP1 + saldo;
+        evento.saldoTotal = evento.saldoTotal + saldo;
+
+        const apostador = {
+          id: usuario.id,
+          name: usuario.firstName+" "+usuario.lastName,
+          dineroAp: saldo,
+          playerAp: selectValue,
+          fechaAp: new Date,
+        }
+
+        evento.apostadores.push(apostador);
+        //updateBet()
+
+        const bet = {
+          id: eventoActual,
+          value: saldo,
+          player: selectValue
+        }
+  
+        usuario.bets.push(bet);
+  
+        //updateUser();
+      }else if(selectValue === evento.player2) {
+        evento.totalP2 = evento.totalP2 + 1;
+        evento.saldoP2 = evento.saldoP2 + saldo;
+        evento.saldoTotal = evento.saldoTotal + saldo;
+
+        const apostador = {
+          id: usuario.id,
+          name: usuario.firstName+" "+usuario.lastName,
+          dineroAp: saldo,
+          playerAp: selectValue,
+          fechaAp: fechaActual()
+        }
+
+        evento.apostadores.push(apostador);
+        updateBet()
+
+        const bet = {
+          id: eventoActual,
+          valueAp: saldo,
+          playerAp: selectValue,
+          fechaAp: fechaActual()
+        }
+  
+        usuario.bets.push(bet);
+  
+        updateUser();
+      }    
+      
+      //console.log(usuario);
+      //console.log(eventos[posicion]);
+
+    } else {
+      console.log(
+        "No hay suficiente saldo para realizar la transacción"
+      );
+    }
+
+    console.log("apostar");
+  }
+
+
+
 
   return (
     <>
@@ -117,10 +151,11 @@ const Game = (props) => {
         <section className="text-center bg_darkHeavyMetal text_gold rounded_15 shadow p-3">
           <FaChess className="fs-1" />
           <h2 className="display-5 fw-bolder">
-            {eventos.length > 0 && eventoActual
-              ? eventos[eventoActual].evento
+            {eventos.length > 0 && eventoActual && posicion
+              ? eventos[posicion].player1 + " vs " + eventos[posicion].player2
               : "Seleciona un evento"}
           </h2>
+
 
           {eventos.length > 0 && eventoActual ? (
             <button
@@ -148,7 +183,7 @@ const Game = (props) => {
                     className="me-auto fs-4 modal-title text_gold"
                     id="exampleModalLabel"
                   >
-                    Hola {usuarios.length > 0 ? usuarios[id].nombre : "Jhon"}
+                    Hola {usuario ? usuario.firstName : "Jhon"}
                   </h5>
 
                   <button
@@ -160,10 +195,10 @@ const Game = (props) => {
                 </div>
                 <div className="modal-body">
                   <div className="text-end bg_darkHeavyMetal text_gold p-2 rounded_15">
-                    <span>Saldo actual </span>$
-                    {usuarios.length > 0 ? usuarios[id].saldo : "0.00"}
+                    <span>Saldo actual </span>
+                    {usuario ? Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 2 }).format(usuario.balance) : "0.00"}
                   </div>
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row mt-3 mb-3">
                     <Button
                       txt="20k"
                       value="20000"
@@ -198,34 +233,28 @@ const Game = (props) => {
                       onChange={onClick}
                     />
                   </div>
+                  {eventos.length > 0 ? (<div className="mt-2 mb-4">
+                    <select className="form-select" name="jugadores" id="jugadores" value={selectValue} onChange={selectChange}>
+                      <option value={eventos[posicion].player1}>{eventos[posicion].player1}</option>
+                      <option value={eventos[posicion].player2}>{eventos[posicion].player2}</option>
+                    </select>
+                  </div>): ""}
                   <button
                     className="btn bg_gold btn1 shadow me-2"
                     onClick={apostar}
                   >
                     Apostar
                   </button>
-                  <div className="text-start text_darkHeavyMetal">
-                    {apostadores.map((apostador) => (
-                      <p key={apostador.id}>
-                        Usuario {apostador.nombre} aposto ${apostador.cantidad}
-                      </p>
-                    ))}
 
-                    {condicionalGanador && eventoGanador ? (
-                      <p>Gano</p>
-                    ) : !condicionalGanador && eventoGanador ? (
-                      <p>Perdio</p>
-                    ) : (
-                      ""
-                    )}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
       </div>
+
     </>
   );
 };
 export default Game;
+

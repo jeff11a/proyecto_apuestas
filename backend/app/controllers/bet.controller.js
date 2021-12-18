@@ -213,7 +213,7 @@ exports.findAllFinished = (req, res) => {
 
 //cuenta los eventos de apuestas finalizados
 exports.countFinished = (req, res) => {
-  Bet.countDocuments({ estado: "Finalizado" })
+  Bet.countDocuments({ estado: "Finalizado", activo: true })
     .then(count => {
       res.send({ cont: count });
     })
@@ -228,7 +228,7 @@ exports.countFinished = (req, res) => {
 //Contar eventos de apuestas disponibles 
 
 exports.countActive = (req, res) => {
-  Bet.countDocuments({ $or: [{ estado: /Disponible/i }, { estado: /Jugando/i }] })
+  Bet.countDocuments({ $or: [{ estado: /Disponible/i }, { estado: /Jugando/i }], activo: true })
     .then(count => {
       res.send({ cont: count });
     })
@@ -242,7 +242,7 @@ exports.countActive = (req, res) => {
 
 //contar todos los eventos
 exports.countAll = (req, res) => {
-  Bet.countDocuments()
+  Bet.countDocuments({ activo: true })
     .then(count => {
       res.send({ cont: count });
     })

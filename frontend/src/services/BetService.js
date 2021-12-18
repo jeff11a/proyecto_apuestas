@@ -4,6 +4,10 @@ const getAll = (params) => {
   return http.get("/bets", { params });
 };
 
+const getAllActive = (params) => {
+  return http.get("/bets/active", { params });
+};
+
 const get = (id) => {
   return http.get(`/bets/${id}`);
 };
@@ -43,6 +47,7 @@ const countAll = () => {
 const BetService = {
   getAll,
   get,
+  getAllActive,
   create,
   update,
   remove,

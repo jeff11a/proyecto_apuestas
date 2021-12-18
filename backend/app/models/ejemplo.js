@@ -1,23 +1,25 @@
 /* 
 
 const user = {
-    _id: String,  //mongoDB lo crea automaticamente 
-    firstName: String, 
-    lastName: String, 
-    email: String,
-    password: String,
-    country: String,
-    phoneNumber: Number,
-    birthday: Date,       // fecha para verificar si es mayor de edad
-    typeUser: String,    //A = administrador, C = cliente, I = interno
+    _id: ObjectId,       // id 
+    firstName: String,   // Nombres del usuario
+    lastName: String,    // Apellidos del usuario
+    email: String,       // Correo del usuario
+    password: String,    // Contraseña cifrada
+    country: String,     // País del usuario
+    phoneNumber: Number, // Número de teléfono
+    birthday: Date,      // Fecha de nacimiento del usuario para verificar si es mayor de edad
+    roles: ObjectId,     // ID del rol del usuario
     active: Boolean,     // Activar o desactivar usuario
-    balance: Number,     //Saldo para los clientes
+    balance: Number,     // Saldo disponible para apostar
+    banco: Number,       // Saldo para simular el desposito y retiro de dinero
     bets: [
         {
-            id: String,  //ID de la apuesta
-            status: String, //Ganador, Perdedor, Apostando
-            valor: Number,  //valor apostado
-            player: string  //jugador o equipo apostado
+            id: String,     // ID de la apuesta
+            status: String, // Estado de la apuesta (Ganador, Perdedor, Apostando)
+            valor: Number,  // Dinero apostado
+            player: string, // jugador o equipo al que el jugador aposto
+            fecha: Date     // Dia en que se realizo la apuesta
         }
     ]
 }

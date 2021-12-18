@@ -35,7 +35,7 @@ const Apostar = () => {
     UserDataService.get(id)
       .then(response => {
         setUser(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -58,7 +58,7 @@ const Apostar = () => {
   const updateUser = () => {
     UserDataService.update(currentUser.id, user)
       .then(response => {
-        console.log(response.data);
+        //console.log(response.data);
         window.location.reload();
       })
       .catch(e => {
@@ -66,7 +66,7 @@ const Apostar = () => {
       });
   };
 
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState("");
 
   const onClick = (event) => {
     event.preventDefault();
@@ -178,7 +178,6 @@ const Apostar = () => {
                 value={inputValue}
                 onChange={onClick}
                 onBlur={onClick}
-                style={{ width: "200px" }}
               />
             </div>
           </div>

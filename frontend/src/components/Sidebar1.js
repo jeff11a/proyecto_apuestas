@@ -1,11 +1,12 @@
 import { FaChessBoard } from "react-icons/fa";
 
 const Sidebar = (props) => {
-  const { eventos, onEventoActualChange } = props;
+  const { eventos , onEventoActualChange, posicionActual } = props;
 
   const onClick = (evento) => {
     evento.preventDefault();
     onEventoActualChange(evento.target.getAttribute("value1"));
+    posicionActual(evento.target.getAttribute("value2"));
   };
 
   return (
@@ -20,7 +21,7 @@ const Sidebar = (props) => {
       </a>
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
-        {eventos.length > 1
+        {eventos.length
           ? eventos.map((evento, i) => (
             <li className="nav-item" key={i}>
               <a
@@ -28,9 +29,10 @@ const Sidebar = (props) => {
                 className="nav-link text-white d-flex align-items-center"
                 onClick={onClick}
                 value1={evento.id}
+                value2={i}
                 key={evento.id}
               >
-                {evento.evento}
+                {evento.player1+" vs "+evento.player2}
               </a>
             </li>
           ))

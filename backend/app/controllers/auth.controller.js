@@ -81,7 +81,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
 
     User.findOne({
-        email: req.body.email
+        email: req.body.email, active: true
     })
         .exec((err, user) => {
             if (err) {
