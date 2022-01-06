@@ -63,7 +63,7 @@ const Registro = (props) => {
     };
     console.log(JSON.stringify(newUser));
     services.create(registerUrl, newUser).then(() => {
-      navigate("/login");
+      navigate("/logincd");
     });
   };
 
