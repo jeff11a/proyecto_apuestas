@@ -1,6 +1,0 @@
-npm install @hapi/joi
-    Package to validate our information
-npm install bcryptjs
-
-npm install jsonwebtoken
-    //After we login we get a jwt token to know that we alread are login
